@@ -44,3 +44,6 @@ CLAUDE.md
 
 # local reference docs (CV, design system, project notes) — never commit
 docs/
+
+# 7 MB original photo, kept locally; the site uses public/images/about-portrait.webp
+/public/images/Aditya about.jpg
