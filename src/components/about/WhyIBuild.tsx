@@ -1,3 +1,4 @@
+import Reveal from "@/animations/gsap/Reveal";
 import Section from "@/components/layout/Section";
 import { SECTION_IDS, WHY_COPY } from "@/lib/constants";
 
@@ -5,7 +6,12 @@ import { SECTION_IDS, WHY_COPY } from "@/lib/constants";
 export default function WhyIBuild() {
   return (
     <Section id={SECTION_IDS.why} index="08" title="Why I Build">
-      <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-16">
+      {/* The quietest reveal on the page: one block, a shorter lift, a slower ease in. */}
+      <Reveal
+        y={12}
+        duration={1.1}
+        className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-16"
+      >
         <div className="max-w-2xl space-y-6 text-xl leading-relaxed text-silver md:text-2xl lg:col-span-7">
           {WHY_COPY.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
@@ -18,7 +24,7 @@ export default function WhyIBuild() {
             {WHY_COPY.closing}
           </p>
         </div>
-      </div>
+      </Reveal>
     </Section>
   );
 }

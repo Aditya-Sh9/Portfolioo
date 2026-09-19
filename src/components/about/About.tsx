@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Reveal from "@/animations/gsap/Reveal";
 import Section from "@/components/layout/Section";
 import { ABOUT_COPY, SECTION_IDS } from "@/lib/constants";
 
@@ -10,7 +11,7 @@ export default function About() {
   return (
     <Section id={SECTION_IDS.about} index="02" title="About" titleStyle="label">
       <div className="mt-8 grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
-        <div className="lg:col-span-7">
+        <Reveal className="lg:col-span-7">
           <h3 className="font-display text-5xl leading-[0.95] tracking-wide text-balance md:text-7xl">
             {ABOUT_COPY.headline}
           </h3>
@@ -31,7 +32,7 @@ export default function About() {
               </div>
             ))}
           </dl>
-        </div>
+        </Reveal>
 
         <PortraitSlot />
       </div>
@@ -46,28 +47,30 @@ export default function About() {
  */
 function PortraitSlot() {
   return (
-    <figure className="lg:col-span-5">
-      <div className="relative aspect-[4/5] w-full max-w-md overflow-hidden border-2 border-bone bg-charcoal shadow-brutal-sm lg:ml-auto lg:max-w-none">
-        <Image
-          src="/images/about-portrait.webp"
-          alt="Aditya Sharma sitting on a rock in a pine forest, looking off to the left."
-          fill
-          sizes="(min-width: 1024px) 480px, (min-width: 448px) 448px, 100vw"
-          className="object-cover brightness-[0.85] contrast-105 saturate-[0.85]"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-linear-to-t from-ink/70 via-ink/10 to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-linear-to-r from-ink/40 to-transparent to-50%"
-        />
-      </div>
-      <figcaption className="mt-4 flex items-center gap-3 text-xs font-bold tracking-widest text-silver uppercase lg:justify-end">
-        <span aria-hidden="true" className="h-2 w-2 bg-accent" />
-        Aditya Sharma
-      </figcaption>
-    </figure>
+    <Reveal delay={0.12} className="lg:col-span-5">
+      <figure>
+        <div className="relative aspect-[4/5] w-full max-w-md overflow-hidden border-2 border-bone bg-charcoal shadow-brutal-sm lg:ml-auto lg:max-w-none">
+          <Image
+            src="/images/about-portrait.webp"
+            alt="Aditya Sharma sitting on a rock in a pine forest, looking off to the left."
+            fill
+            sizes="(min-width: 1024px) 480px, (min-width: 448px) 448px, 100vw"
+            className="object-cover brightness-[0.85] contrast-105 saturate-[0.85]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-t from-ink/70 via-ink/10 to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-r from-ink/40 to-transparent to-50%"
+          />
+        </div>
+        <figcaption className="mt-4 flex items-center gap-3 text-xs font-bold tracking-widest text-silver uppercase lg:justify-end">
+          <span aria-hidden="true" className="h-2 w-2 bg-accent" />
+          Aditya Sharma
+        </figcaption>
+      </figure>
+    </Reveal>
   );
 }

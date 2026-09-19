@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Reveal from "@/animations/gsap/Reveal";
 
 type SectionProps = {
   id: string;
@@ -26,26 +27,28 @@ export default function Section({
       className="min-h-[70svh] border-t-2 border-steel py-24 md:py-32"
     >
       <div className="mx-auto w-full max-w-6xl px-4">
-        {titleStyle === "label" ? (
-          <h2
-            id={headingId}
-            className="text-xs font-bold tracking-widest text-silver uppercase"
-          >
-            <span className="text-accent">{index}</span> / {title}
-          </h2>
-        ) : (
-          <>
-            <p className="text-xs font-bold tracking-widest text-silver uppercase">
-              <span className="text-accent">{index}</span>
-            </p>
+        <Reveal>
+          {titleStyle === "label" ? (
             <h2
               id={headingId}
-              className="mt-3 font-display text-5xl tracking-wide md:text-7xl"
+              className="text-xs font-bold tracking-widest text-silver uppercase"
             >
-              {title}
+              <span className="text-accent">{index}</span> / {title}
             </h2>
-          </>
-        )}
+          ) : (
+            <>
+              <p className="text-xs font-bold tracking-widest text-silver uppercase">
+                <span className="text-accent">{index}</span>
+              </p>
+              <h2
+                id={headingId}
+                className="mt-3 font-display text-5xl tracking-wide md:text-7xl"
+              >
+                {title}
+              </h2>
+            </>
+          )}
+        </Reveal>
         {children}
       </div>
     </section>

@@ -1,3 +1,4 @@
+import Reveal from "@/animations/gsap/Reveal";
 import Section from "@/components/layout/Section";
 import { CORE_FOUNDATIONS, SKILL_GROUPS } from "@/data/skills";
 import { SECTION_IDS } from "@/lib/constants";
@@ -6,7 +7,7 @@ import { SECTION_IDS } from "@/lib/constants";
 export default function HowIBuild() {
   return (
     <Section id={SECTION_IDS.build} index="06" title="How I Build">
-      <ul className="mt-10 grid gap-6 md:grid-cols-2">
+      <Reveal as="ul" stagger={0.1} className="mt-10 grid gap-6 md:grid-cols-2">
         {SKILL_GROUPS.map((group, i) => (
           <li key={group.id}>
             <article className="h-full border-2 border-steel bg-charcoal p-6 transition-colors duration-150 hover:border-bone md:p-8">
@@ -28,21 +29,23 @@ export default function HowIBuild() {
             </article>
           </li>
         ))}
-      </ul>
+      </Reveal>
 
-      <div className="mt-6 border-2 border-steel bg-ink p-6 md:flex md:items-baseline md:gap-10 md:p-8">
-        <h3 className="text-xs font-bold tracking-widest text-silver uppercase">
-          <span className="text-accent">Core</span> / Foundations
-        </h3>
-        <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-3 md:mt-0">
-          {CORE_FOUNDATIONS.map((item) => (
-            <li key={item} className="flex items-center gap-3 font-medium">
-              <span aria-hidden className="h-1.5 w-1.5 bg-accent" />
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Reveal className="mt-6">
+        <div className="border-2 border-steel bg-ink p-6 md:flex md:items-baseline md:gap-10 md:p-8">
+          <h3 className="text-xs font-bold tracking-widest text-silver uppercase">
+            <span className="text-accent">Core</span> / Foundations
+          </h3>
+          <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-3 md:mt-0">
+            {CORE_FOUNDATIONS.map((item) => (
+              <li key={item} className="flex items-center gap-3 font-medium">
+                <span aria-hidden className="h-1.5 w-1.5 bg-accent" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
     </Section>
   );
 }

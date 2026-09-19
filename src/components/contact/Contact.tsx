@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Reveal from "@/animations/gsap/Reveal";
 import Section from "@/components/layout/Section";
 import { CONTACT, PROFILE_LINKS } from "@/data/contact";
 import { SECTION_IDS } from "@/lib/constants";
@@ -10,7 +11,7 @@ import { SECTION_IDS } from "@/lib/constants";
 export default function Contact() {
   return (
     <Section id={SECTION_IDS.contact} index="09" title="Contact">
-      <div className="mt-10 grid gap-6 lg:grid-cols-12">
+      <Reveal className="mt-10 grid gap-6 lg:grid-cols-12">
         <a
           href={`mailto:${CONTACT.email}`}
           className="@container flex flex-col gap-12 border-2 border-bone bg-charcoal p-6 shadow-brutal transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px active:translate-x-[3px] active:translate-y-[3px] active:shadow-none md:p-10 lg:col-span-7"
@@ -46,7 +47,7 @@ export default function Contact() {
             </li>
           ))}
         </ul>
-      </div>
+      </Reveal>
     </Section>
   );
 }
