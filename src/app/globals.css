@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+ * Design tokens — locked in docs/superhero_portfolio_design_system.md.
+ * Base palette (80%), hero accents, and the per-project accent system live here.
+ */
+
+@theme {
+  /* Batman base palette */
+  --color-ink: #08090b;
+  --color-charcoal: #121417;
+  --color-steel: #272b30;
+  --color-silver: #b8bdc5;
+  --color-bone: #f4f4f1;
+
+  /* Hero accents (supporting, never competing with the base) */
+  --color-hero-red: #e3262e;
+  --color-hero-blue: #1769d1;
+  --color-hero-gold: #d6a72c;
+}
+
+/*
+ * Active accent (15%) and secondary highlight (5%).
+ * Components use `accent` / `highlight` utilities; a project page or section
+ * switches theme with data-accent="red" | "blue" on any ancestor.
+ */
+:root {
+  --accent: var(--color-hero-red);
+  --highlight: var(--color-hero-gold);
+}
+
+[data-accent="red"] {
+  --accent: var(--color-hero-red);
+}
+
+[data-accent="blue"] {
+  --accent: var(--color-hero-blue);
+}
+
+@theme inline {
+  --color-background: var(--color-ink);
+  --color-foreground: var(--color-bone);
+  --color-accent: var(--accent);
+  --color-highlight: var(--highlight);
+
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bebas-neue), "Arial Narrow", Impact, sans-serif;
+
+  /* Neo-brutalist hard shadow, tinted by the active accent */
+  --shadow-brutal: 6px 6px 0 0 var(--accent);
+  --shadow-brutal-sm: 3px 3px 0 0 var(--accent);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  /* Clears the fixed navbar for anchor links (native and Lenis). */
+  html {
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--color-bone);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+/*
+ * Hero texture — PatternCraft "Dark White Dotted Grid". Pasted CSS with two changes: the
+ * solid black fill is dropped, and the dot alpha (was 0.2) is 1 so overall strength is
+ * set once, by the opacity on the layer that uses this class (~10%). Static, never
+ * animated. The mask fades it out so it never covers the section uniformly.
+ */
+.texture-dotgrid {
+  background-image: radial-gradient(circle, #fff 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+  background-position: 0 0;
+  mask-image: radial-gradient(ellipse 75% 85% at 85% 15%, #000 0%, transparent 72%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
