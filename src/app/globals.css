@@ -159,6 +159,69 @@
 }
 
 /*
+ * Technology rail (components/skills/TechRail.tsx). The track holds two identical groups and
+ * slides left by half its own width, i.e. exactly one group (each group ends in the same gap
+ * that separates its tiles), so the loop has no seam. transform only, one compositor layer,
+ * no JavaScript. The edges fade out with a mask. Hovering the rail pauses it (fine pointers).
+ * Reduced motion: no movement and no mask; the rail becomes a static wrapped grid and the
+ * duplicate group is removed.
+ */
+.tech-rail {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.tech-rail-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: tech-rail 70s linear infinite;
+}
+
+.tech-rail-group {
+  display: flex;
+  flex: none;
+  gap: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+@keyframes tech-rail {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tech-rail:hover .tech-rail-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-rail {
+    mask-image: none;
+    padding-inline: 1rem;
+  }
+
+  .tech-rail-track {
+    width: auto;
+    animation: none;
+    will-change: auto;
+  }
+
+  .tech-rail-group {
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+    padding-right: 0;
+  }
+
+  .tech-rail-copy {
+    display: none;
+  }
+}
+
+/*
  * Spotlight card (components/ui/spotlight-card.tsx). Two overlay layers per card, each a
  * clipped box holding one soft blob that only ever moves by `transform` (the pointer position
  * arrives as --sx / --sy) and fades by `opacity`. The wash is the active accent at the panel
