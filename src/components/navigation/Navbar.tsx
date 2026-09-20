@@ -1,14 +1,18 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState, type ComponentPropsWithoutRef } from "react";
 import { NAV_CTA, NAV_LINKS, SECTION_IDS, SITE } from "@/lib/constants";
 
-/** Tracks which section crosses the middle of the viewport. */
-function useActiveSection(ids: readonly string[]) {
+/** Tracks which section crosses the middle of the viewport. Only runs on the home page. */
+function useActiveSection(ids: readonly string[], enabled: boolean) {
   const [active, setActive] = useState<string>(SECTION_IDS.hero);
 
   useEffect(() => {
+    if (!enabled) return;
+
     const elements = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -24,16 +28,32 @@ function useActiveSection(ids: readonly string[]) {
     );
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [ids]);
+  }, [ids, enabled]);
 
   return active;
+}
+
+/**
+ * On the home page a plain <a> lets Lenis handle the in-page scroll. Anywhere else the same
+ * link becomes a client-side navigation to the home page (`/#id`).
+ */
+function NavAnchor({
+  onHome,
+  href,
+  ...props
+}: ComponentPropsWithoutRef<"a"> & { onHome: boolean; href: string }) {
+  return onHome ? <a href={href} {...props} /> : <Link href={href} {...props} />;
 }
 
 const SECTION_LIST = [SECTION_IDS.hero, ...NAV_LINKS.map((l) => l.id), NAV_CTA.id];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(SECTION_LIST);
+  const onHome = usePathname() === "/";
+  const observed = useActiveSection(SECTION_LIST, onHome);
+  // Case studies live under Selected Work, so that is the section they belong to.
+  const active = onHome ? observed : SECTION_IDS.work;
+  const hrefFor = (id: string) => (onHome ? `#${id}` : `/#${id}`);
 
   useEffect(() => {
     if (!open) return;
@@ -64,38 +84,41 @@ export default function Navbar() {
           aria-label="Primary"
           className="flex items-center justify-between border-2 border-steel bg-charcoal/80 px-4 py-2 backdrop-blur-md"
         >
-          <a
-            href={`#${SECTION_IDS.hero}`}
+          <NavAnchor
+            onHome={onHome}
+            href={onHome ? `#${SECTION_IDS.hero}` : "/"}
             className="text-sm font-bold tracking-tight uppercase"
             onClick={() => setOpen(false)}
           >
             {SITE.name}
-          </a>
+          </NavAnchor>
 
           <ul className="hidden items-center gap-1 lg:flex">
             {NAV_LINKS.map((link) => (
               <li key={link.id}>
-                <a
-                  href={`#${link.id}`}
+                <NavAnchor
+                  onHome={onHome}
+                  href={hrefFor(link.id)}
                   className={linkClass(link.id)}
                   aria-current={active === link.id ? "location" : undefined}
                 >
                   {link.label}
-                </a>
+                </NavAnchor>
               </li>
             ))}
           </ul>
 
           <div className="flex items-center gap-2">
-            <a
-              href={`#${NAV_CTA.id}`}
+            <NavAnchor
+              onHome={onHome}
+              href={hrefFor(NAV_CTA.id)}
               className="hidden border-2 border-bone px-4 py-1.5 text-xs font-bold tracking-widest text-bone uppercase shadow-brutal-sm transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px hover:bg-accent active:translate-x-[3px] active:translate-y-[3px] active:shadow-none lg:inline-block"
             >
               {NAV_CTA.label}
-            </a>
+            </NavAnchor>
             <button
               type="button"
-              className="border-2 border-steel p-2 text-bone transition-colors duration-150 hover:border-bone lg:hidden"
+              className="border-2 border-steel p-2 text-bone transition-colors duration-150 hover:border-interactive lg:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
@@ -115,8 +138,9 @@ export default function Navbar() {
           <ul className="divide-y-2 divide-steel">
             {[...NAV_LINKS, NAV_CTA].map((link) => (
               <li key={link.id}>
-                <a
-                  href={`#${link.id}`}
+                <NavAnchor
+                  onHome={onHome}
+                  href={hrefFor(link.id)}
                   onClick={() => setOpen(false)}
                   aria-current={active === link.id ? "location" : undefined}
                   className={`flex items-baseline gap-4 px-4 py-3 text-sm font-bold tracking-widest uppercase ${
@@ -127,7 +151,7 @@ export default function Navbar() {
                     {link.index}
                   </span>
                   {link.label}
-                </a>
+                </NavAnchor>
               </li>
             ))}
           </ul>

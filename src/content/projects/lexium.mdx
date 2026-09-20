@@ -1,0 +1,61 @@
+<CaseSection index="01" title="Overview">
+
+Lexium is a full-stack legal services marketplace designed to connect citizens with verified legal professionals such as advocates, mediators, arbitrators, notaries, document writers, and tax consultants.
+
+The platform supports the complete journey from discovering a professional and booking a consultation to filing a case, tracking its progress, completing the service, leaving a review, and releasing the associated payment.
+
+</CaseSection>
+
+<CaseSection index="02" title="Three roles">
+
+The platform is built around three distinct roles: citizens, legal professionals, and administrators.
+
+- **Citizens** can browse approved professionals, view their profiles and services, book consultations, file and track cases, and submit reviews.
+- **Providers** have their own dashboard for managing incoming cases, appointments, active cases, profiles, reviews, and earnings.
+- **Administrators** supervise the platform by approving providers, managing users, monitoring cases and transactions, and controlling the release of escrowed payments.
+
+</CaseSection>
+
+<CaseSection index="03" title="Case lifecycle and escrow">
+
+A major part of Lexium is its case lifecycle and escrow system. When a citizen files a case, it moves through defined stages such as pending, under review, in progress, awaiting documents, resolved, and closed, with timeline entries recording important updates.
+
+Once a consultation is completed, the associated payment enters escrow and can only be released by an administrator after the linked case reaches an eligible resolved or closed state.
+
+</CaseSection>
+
+<CaseSection index="04" title="Compliance and performance">
+
+- **Providers** get performance badges and leaderboard ranking, compliance notices and guidance, and a transparent earnings ledger alongside their dashboard analytics.
+- **Administrators** handle complaint moderation and resolution, and can escalate issues with warnings, earnings deductions, or escrow holds. They also have leaderboard and performance analytics, and audit trails for all compliance actions.
+
+</CaseSection>
+
+<CaseSection index="05" title="Architecture">
+
+<Flow
+  stages={[
+    { nodes: [{ name: "React 19 + Vite + Tailwind CSS", detail: "Vercel" }] },
+    { nodes: [{ name: "Laravel 13 REST API", detail: "Render" }] },
+    { nodes: [{ name: "MongoDB Atlas", detail: "Primary database" }] },
+  ]}
+/>
+
+Firebase Authentication handles citizen and provider identity, while administrators use a separate authenticated flow.
+
+</CaseSection>
+
+<CaseSection index="06" title="Stack">
+
+<Spec
+  items={[
+    { label: "Frontend", value: "React 19, Vite, Tailwind CSS v4, Framer Motion" },
+    { label: "Backend", value: "Laravel 13, PHP 8.2+" },
+    { label: "Database", value: "MongoDB Atlas (via laravel-mongodb)" },
+    { label: "Auth", value: "Firebase Authentication (citizens and providers), separate admin flow" },
+    { label: "Tooling", value: "Docker" },
+    { label: "Deploy", value: "Vercel (frontend), Render (backend)" },
+  ]}
+/>
+
+</CaseSection>

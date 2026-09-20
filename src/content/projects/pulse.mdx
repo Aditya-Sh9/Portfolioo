@@ -1,0 +1,59 @@
+<CaseSection index="01" title="Overview">
+
+Pulse is a comprehensive, full-stack task management application built to help teams organize, track, and collaborate on projects efficiently. It features a modern, responsive UI with real-time updates and role-based access control.
+
+It solves the problem of scattered team communication and delayed task updates by providing a unified, real-time workspace. It’s built for software development units, remote organizations, project managers, and freelance collaborative teams.
+
+</CaseSection>
+
+<CaseSection index="02" title="What it does">
+
+- **Role-based access control** — distinct roles (Admin, Member, and more) with specific permissions, for data security and a proper workflow.
+- **Real-time updates** — powered by Socket.io, so changes show up instantly across all connected clients without refreshing.
+- **Interactive task board** — Kanban-styled, drag-and-drop task management.
+- **Multiple views** — switch between Board, List, Table, and Calendar.
+- **Authentication** — secure sign-up and login managed via Firebase.
+- **Invitations and email notifications** — admins can invite peers securely by email, with automated updates for important actions through Nodemailer.
+- **Team messaging and analytics** — messaging over websockets, and Recharts dashboards driven by live backend metrics.
+
+</CaseSection>
+
+<CaseSection index="03" title="Architecture">
+
+<Flow
+  stages={[
+    { nodes: [{ name: "React 19 + Vite", detail: "Protected routes via React Router" }] },
+    { nodes: [{ name: "Express API", detail: "Firebase Admin token checks + Socket.io" }] },
+    {
+      nodes: [
+        { name: "MongoDB Atlas", detail: "Tasks, messages, workspaces" },
+        { name: "Firebase Authentication", detail: "Identity" },
+      ],
+    },
+  ]}
+/>
+
+- The server verifies incoming requests using the Firebase Admin SDK.
+- Real-time events, such as moving a task to a different column, trigger an immediate Socket.io broadcast to every connected user.
+- Pulse pairs an external identity provider (Firebase Authentication) with MongoDB Atlas, which holds persistent task logic, message tracking, and workspace structure.
+
+</CaseSection>
+
+<CaseSection index="04" title="Challenges">
+
+- **Real-time state management** — synchronizing complex socket events across multiple distributed browsers at once, without introducing duplication loops.
+- **Dual-database abstraction** — linking Firebase identity state into MongoDB’s schema maps reliably.
+- **Complex UI rendering** — handling intense drag-and-drop reordering at the DOM level without sacrificing frame rates.
+
+</CaseSection>
+
+<CaseSection index="05" title="Stack">
+
+<Spec
+  items={[
+    { label: "Frontend", value: "React 19, Vite, Tailwind CSS v4, Framer Motion, Recharts, @hello-pangea/dnd, Socket.io-client, Firebase Authentication" },
+    { label: "Backend", value: "Node.js and Express.js, MongoDB (Mongoose), Socket.io, Firebase Admin SDK, Nodemailer, Node-cron" },
+  ]}
+/>
+
+</CaseSection>

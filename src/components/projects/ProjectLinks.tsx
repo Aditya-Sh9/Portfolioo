@@ -3,7 +3,14 @@ import { ArrowUpRight } from "lucide-react";
 import ExternalLink, { LINK_STYLES } from "@/components/ui/ExternalLink";
 import type { Project } from "@/data/projects";
 
-export default function ProjectLinks({ project }: { project: Project }) {
+export default function ProjectLinks({
+  project,
+  showCaseStudy = true,
+}: {
+  project: Project;
+  /** False on the case study itself, so it does not link to its own page. */
+  showCaseStudy?: boolean;
+}) {
   const { title, slug, links, hasCaseStudy } = project;
 
   return (
@@ -20,7 +27,7 @@ export default function ProjectLinks({ project }: { project: Project }) {
           GitHub
         </ExternalLink>
       </li>
-      {hasCaseStudy && (
+      {hasCaseStudy && showCaseStudy && (
         <li>
           <Link href={`/projects/${slug}`} className={LINK_STYLES.secondary}>
             Case study

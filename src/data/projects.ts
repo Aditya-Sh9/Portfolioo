@@ -56,9 +56,9 @@ export const SOLACE: ActiveProject = {
     github: "https://github.com/Aditya-Sh9/Solace",
     live: "https://solace-frontend-yk6x.vercel.app",
   },
-  hasCaseStudy: false,
-  // Source: Projects.md progress table. Not yet verified as current, so it is shown only as
-  // the labelled roadmap and never as a headline fact. Re-check before launch.
+  hasCaseStudy: true,
+  // Source: Projects.md progress table. Aditya confirmed it is current (2026-09-20). It stays
+  // a labelled roadmap and is not used as a headline fact on the cards.
   phases: [
     { number: 0, name: "Monorepo, deploy pipeline, Supabase", done: true },
     { number: 1, name: "Auth + animated onboarding", done: true },
@@ -79,7 +79,7 @@ export const LEXIUM: Project = {
     "A full-stack marketplace connecting citizens with verified legal professionals, covering the whole journey from finding a provider and booking a consultation to filing a case, tracking it, leaving a review and releasing the escrowed payment.",
   period: "Apr 2026 — May 2026",
   status: "Live",
-  // Stack per the Lexium README, plus Docker (CV only; not in the README table).
+  // Stack per the Lexium README, plus Docker (confirmed by Aditya, 2026-09-20).
   stack: [
     "React",
     "Vite",
@@ -101,7 +101,7 @@ export const LEXIUM: Project = {
     github: "https://github.com/Aditya-Sh9/Lexium",
     live: "https://lexium-law.vercel.app/",
   },
-  hasCaseStudy: false,
+  hasCaseStudy: true,
 };
 
 export const PULSE: Project = {
@@ -125,7 +125,7 @@ export const PULSE: Project = {
     github: "https://github.com/Aditya-Sh9/Pulse",
     live: "https://pulse-sigma-amber.vercel.app/",
   },
-  hasCaseStudy: false,
+  hasCaseStudy: true,
 };
 
 /** Selected Work order. */
