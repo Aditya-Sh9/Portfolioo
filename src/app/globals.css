@@ -147,6 +147,18 @@
 }
 
 /*
+ * Technology logos (components/ui/TagList.tsx, data/tech.ts). A one-colour SVG used as a mask
+ * over the current text colour, so every logo follows the theme instead of its brand colour.
+ * `--icon` is the `url()` of the file in public/icons/tech.
+ */
+.tech-icon {
+  display: block;
+  flex: none;
+  background-color: currentColor;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+/*
  * Spotlight card (components/ui/spotlight-card.tsx). Two overlay layers per card, each a
  * clipped box holding one soft blob that only ever moves by `transform` (the pointer position
  * arrives as --sx / --sy) and fades by `opacity`. The wash is the active accent at the panel
