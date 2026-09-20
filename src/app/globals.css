@@ -28,6 +28,12 @@
 :root {
   --accent: var(--color-hero-red);
   --highlight: var(--color-hero-gold);
+  /* Colour of hover, focus and other interactive detail: blue on the site, the project's own accent inside a project. */
+  --interactive: var(--color-hero-blue);
+}
+
+[data-accent] {
+  --interactive: var(--accent);
 }
 
 [data-accent="red"] {
@@ -51,6 +57,7 @@
   --color-foreground: var(--color-bone);
   --color-accent: var(--accent);
   --color-highlight: var(--highlight);
+  --color-interactive: var(--interactive);
 
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bebas-neue), "Arial Narrow", Impact, sans-serif;
@@ -82,7 +89,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--interactive);
     outline-offset: 3px;
   }
 }
@@ -98,6 +105,18 @@
   background-size: 30px 30px;
   background-position: 0 0;
   mask-image: radial-gradient(ellipse 75% 85% at 85% 15%, #000 0%, transparent 72%);
+}
+
+/*
+ * A faint wash of the active accent across a project's title panel, so its identity reads at
+ * a glance (Pulse blue, SOLACE and Lexium red). The same token at low alpha, not a new colour.
+ */
+.panel-tint {
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 18%, transparent),
+    transparent 70%
+  );
 }
 
 /*

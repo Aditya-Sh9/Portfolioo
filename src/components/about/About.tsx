@@ -67,7 +67,7 @@ function PortraitSlot() {
           />
         </div>
         <figcaption className="mt-4 flex items-center gap-3 text-xs font-bold tracking-widest text-silver uppercase lg:justify-end">
-          <span aria-hidden="true" className="h-2 w-2 bg-accent" />
+          <span aria-hidden="true" className="h-2 w-2 bg-highlight" />
           Aditya Sharma
         </figcaption>
       </figure>

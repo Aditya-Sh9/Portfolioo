@@ -28,11 +28,11 @@ export default function SelectedWork() {
                   data-project={project.slug}
                   data-accent={project.accent}
                   data-highlight={project.highlight}
-                  className="grid border-2 border-steel bg-charcoal transition-colors duration-150 hover:border-bone md:grid-cols-12"
+                  className="grid border-2 border-steel bg-charcoal transition-colors duration-150 hover:border-interactive md:grid-cols-12"
                 >
                   <div
                     data-web-anchor
-                    className={`@container relative isolate flex flex-col overflow-hidden border-b-2 border-steel bg-ink p-6 md:col-span-5 md:border-b-0 md:p-8 lg:col-span-4 ${flipped ? "md:order-last md:border-l-2" : "md:border-r-2"}`}
+                    className={`panel-tint @container relative isolate flex flex-col overflow-hidden border-b-2 border-steel bg-ink p-6 md:col-span-5 md:border-b-0 md:p-8 lg:col-span-4 ${flipped ? "md:order-last md:border-l-2" : "md:border-r-2"}`}
                   >
                     <div
                       aria-hidden
@@ -68,7 +68,7 @@ export default function SelectedWork() {
                       {project.description}
                     </p>
                     <div className="mt-8">
-                      <FactList facts={project.facts} />
+                      <FactList facts={project.facts} variant="project" />
                     </div>
                     <div className="mt-6">
                       <TagList items={project.stack} label="Tech stack" />

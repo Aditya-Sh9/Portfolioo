@@ -19,7 +19,7 @@ export default function WhyIBuild() {
         </div>
 
         <div className="lg:col-span-5">
-          <div aria-hidden className="mb-6 h-2 w-24 bg-accent" />
+          <div aria-hidden className="mb-6 h-2 w-24 bg-highlight" />
           <p className="font-display text-5xl leading-[0.95] tracking-wide text-balance md:text-6xl">
             {WHY_COPY.closing}
           </p>

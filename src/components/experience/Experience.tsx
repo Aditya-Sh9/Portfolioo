@@ -14,7 +14,7 @@ export default function Experience() {
         {EXPERIENCE.map((entry) => (
           <li key={entry.id}>
             <Reveal>
-              <article className="grid border-2 border-steel bg-charcoal transition-colors duration-150 hover:border-bone lg:grid-cols-12">
+              <article className="grid border-2 border-steel bg-charcoal transition-colors duration-150 hover:border-interactive lg:grid-cols-12">
                 <div className="@container relative isolate flex flex-col overflow-hidden border-b-2 border-steel bg-ink p-6 md:p-8 lg:col-span-5 lg:border-r-2 lg:border-b-0">
                   <div
                     aria-hidden

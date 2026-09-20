@@ -10,7 +10,7 @@ export default function HowIBuild() {
       <Reveal as="ul" stagger={0.1} className="mt-10 grid gap-6 md:grid-cols-2">
         {SKILL_GROUPS.map((group, i) => (
           <li key={group.id}>
-            <article className="h-full border-2 border-steel bg-charcoal p-6 transition-colors duration-150 hover:border-bone md:p-8">
+            <article className="h-full border-2 border-steel bg-charcoal p-6 transition-colors duration-150 hover:border-interactive md:p-8">
               <p className="text-xs font-bold tracking-widest text-silver uppercase">
                 <span className="text-accent">{String(i + 1).padStart(2, "0")}</span> /{" "}
                 {String(SKILL_GROUPS.length).padStart(2, "0")}
@@ -39,7 +39,7 @@ export default function HowIBuild() {
           <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-3 md:mt-0">
             {CORE_FOUNDATIONS.map((item) => (
               <li key={item} className="flex items-center gap-3 font-medium">
-                <span aria-hidden className="h-1.5 w-1.5 bg-accent" />
+                <span aria-hidden className="h-2 w-2 bg-hero-blue" />
                 {item}
               </li>
             ))}

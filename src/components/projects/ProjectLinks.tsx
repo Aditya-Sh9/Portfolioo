@@ -24,7 +24,7 @@ export default function ProjectLinks({ project }: { project: Project }) {
         <li>
           <Link href={`/projects/${slug}`} className={LINK_STYLES.secondary}>
             Case study
-            <ArrowUpRight aria-hidden size={14} />
+            <ArrowUpRight aria-hidden size={14} className="text-interactive" />
           </Link>
         </li>
       )}

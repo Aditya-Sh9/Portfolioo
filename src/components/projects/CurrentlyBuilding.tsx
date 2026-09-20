@@ -44,7 +44,7 @@ export default function CurrentlyBuilding() {
               </p>
 
               <div className="mt-10 max-w-xl">
-                <FactList facts={project.facts} />
+                <FactList facts={project.facts} variant="project" />
               </div>
               <div className="mt-8 max-w-xl">
                 <TagList items={project.stack} label="Tech stack" />

@@ -7,7 +7,7 @@ const BASE =
 /** Shared brutalist link styles; also used for internal links that should match. */
 export const LINK_STYLES = {
   primary: `${BASE} border-bone text-bone shadow-brutal-sm hover:-translate-x-px hover:-translate-y-px hover:bg-accent`,
-  secondary: `${BASE} border-steel text-silver hover:border-bone hover:text-bone`,
+  secondary: `${BASE} border-steel text-silver hover:border-interactive hover:text-bone`,
 } as const;
 
 type ExternalLinkProps = {
@@ -32,7 +32,11 @@ export default function ExternalLink({
       className={LINK_STYLES[variant]}
     >
       {children}
-      <ArrowUpRight aria-hidden size={14} />
+      <ArrowUpRight
+        aria-hidden
+        size={14}
+        className={variant === "secondary" ? "text-interactive" : undefined}
+      />
       <span className="sr-only"> — {context} (opens in a new tab)</span>
     </a>
   );

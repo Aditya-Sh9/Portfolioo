@@ -35,13 +35,13 @@ export default function Contact() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between gap-4 border-2 border-steel bg-charcoal px-5 py-4 transition-colors duration-150 hover:border-bone"
+                className="flex items-center justify-between gap-4 border-2 border-steel bg-charcoal px-5 py-4 transition-colors duration-150 hover:border-interactive"
               >
                 <span>
                   <span className="block font-bold">{label}</span>
                   <span className="block text-sm text-silver">{handle}</span>
                 </span>
-                <ArrowUpRight aria-hidden size={18} />
+                <ArrowUpRight aria-hidden size={18} className="text-interactive" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </li>
