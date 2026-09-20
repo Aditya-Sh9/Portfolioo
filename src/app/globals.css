@@ -294,12 +294,27 @@
   );
 }
 
+/*
+ * The beams hang from one fixed point in the ceiling. This zero-width pivot sits there (left
+ * 66%, just above the hero) and reaches the bottom edge; GSAP swings it toward the pointer
+ * (particle-hero.tsx, BEAM_APEX must match `left`). Its origin is the pivot point itself, so it
+ * never depends on the hero's size. The beams keep their own sway inside it.
+ */
+.hero-aim {
+  position: absolute;
+  top: -4.5rem;
+  bottom: 0;
+  left: 66%;
+  width: 0;
+  transform-origin: 0 0;
+}
+
 .hero-beam {
   position: absolute;
-  top: -3rem;
-  left: 66%;
+  top: 1.5rem;
+  left: 0;
   width: min(44rem, 120vw);
-  height: 92%;
+  height: calc((100% - 4.5rem) * 0.92);
   margin-left: calc(min(44rem, 120vw) / -2);
   transform-origin: 50% 0;
   transform: rotate(var(--r));

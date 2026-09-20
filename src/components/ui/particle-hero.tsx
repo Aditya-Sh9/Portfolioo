@@ -6,6 +6,12 @@ import { createParticleField } from "@/animations/particles/particle-field";
 
 const MOTION_REDUCED = "(prefers-reduced-motion: reduce)";
 
+/** Where the light hangs, as a fraction of the width. Matches `.hero-aim { left }` in globals.css. */
+const BEAM_APEX = 0.66;
+/** Degrees of swing per full viewport width of pointer offset from the apex, and the cap. */
+const AIM_GAIN = 60;
+const AIM_MAX = 24;
+
 /**
  * The hero's lighting and atmosphere: soft silver light beams, a few hairlines and drifting
  * dust, all behind the hero copy. Decorative only: the copy never waits on this, and every
@@ -22,6 +28,7 @@ const MOTION_REDUCED = "(prefers-reduced-motion: reduce)";
 export function ParticleHero() {
   const rootRef = useRef<HTMLDivElement>(null);
   const beamsRef = useRef<HTMLDivElement>(null);
+  const aimRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const linesRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -90,6 +97,22 @@ export function ParticleHero() {
         document.addEventListener("visibilitychange", onVisibility);
         sync();
 
+        // The light stays fixed in the ceiling and swings toward the side the pointer is on.
+        // quickTo eases it (a light with some weight); it returns to rest when the pointer
+        // leaves the window. Fine pointers only; touch never moves it.
+        const aim = aimRef.current;
+        const swing = aim
+          ? gsap.quickTo(aim, "rotation", { duration: 1.1, ease: "power3.out" })
+          : null;
+        const onPointerMove = (event: PointerEvent) => {
+          if (!swing || !onScreen || event.pointerType === "touch") return;
+          const offset = (BEAM_APEX - event.clientX / window.innerWidth) * AIM_GAIN;
+          swing(gsap.utils.clamp(-AIM_MAX, AIM_MAX, offset));
+        };
+        const onPointerLeave = () => swing?.(0);
+        window.addEventListener("pointermove", onPointerMove, { passive: true });
+        document.documentElement.addEventListener("pointerleave", onPointerLeave);
+
         // As the hero scrolls away the light holds back (parallax), the dust thins out and
         // the copy drifts up and dims. Transform and opacity only, scrubbed to the scroll.
         const scroll = gsap.timeline({
@@ -128,6 +151,8 @@ export function ParticleHero() {
           if (running) gsap.ticker.remove(tick);
           intersection.disconnect();
           document.removeEventListener("visibilitychange", onVisibility);
+          window.removeEventListener("pointermove", onPointerMove);
+          document.documentElement.removeEventListener("pointerleave", onPointerLeave);
         };
       });
 
@@ -149,9 +174,11 @@ export function ParticleHero() {
       <div ref={beamsRef} className="absolute inset-0">
         <div className="hero-fade absolute inset-0">
           <div className="hero-bloom absolute inset-0" />
-          <div className="hero-beam" data-beam="a" />
-          <div className="hero-beam" data-beam="b" />
-          <div className="hero-beam" data-beam="c" />
+          <div ref={aimRef} className="hero-aim">
+            <div className="hero-beam" data-beam="a" />
+            <div className="hero-beam" data-beam="b" />
+            <div className="hero-beam" data-beam="c" />
+          </div>
         </div>
       </div>
 
