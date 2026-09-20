@@ -159,6 +159,25 @@
 }
 
 /*
+ * Contact glow (components/contact/Contact.tsx). A soft red haze behind the headline and a
+ * fainter one low on the right, from the accent token at low alpha. Static: no animation, and
+ * it fades out well inside the section so it has no visible edge.
+ */
+.contact-glow {
+  background-image:
+    radial-gradient(
+      ellipse 55% 45% at 18% 22%,
+      color-mix(in srgb, var(--accent) 15%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 40% 28% at 90% 72%,
+      color-mix(in srgb, var(--accent) 8%, transparent),
+      transparent 70%
+    );
+}
+
+/*
  * Technology rail (components/skills/TechRail.tsx). The track holds two identical groups and
  * slides left by half its own width, i.e. exactly one group (each group ends in the same gap
  * that separates its tiles), so the loop has no seam. transform only, one compositor layer,

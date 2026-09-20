@@ -7,6 +7,10 @@ type SectionProps = {
   title: string;
   /** "display" (default): big Bebas title. "label": small "02 / TITLE" tag; the section supplies its own headline. */
   titleStyle?: "display" | "label";
+  /** Tighter vertical padding and no minimum height, for a short closing section. */
+  compact?: boolean;
+  /** Extra classes for the <section> itself, e.g. to anchor a full-bleed background layer. */
+  className?: string;
   children?: ReactNode;
 };
 
@@ -16,6 +20,8 @@ export default function Section({
   index,
   title,
   titleStyle = "display",
+  compact = false,
+  className = "",
   children,
 }: SectionProps) {
   const headingId = `${id}-title`;
@@ -24,7 +30,7 @@ export default function Section({
     <section
       id={id}
       aria-labelledby={headingId}
-      className="min-h-[70svh] border-t-2 border-steel py-24 md:py-32"
+      className={`border-t-2 border-steel ${compact ? "py-16 md:py-20" : "min-h-[70svh] py-24 md:py-32"} ${className}`}
     >
       <div className="mx-auto w-full max-w-6xl px-4">
         <Reveal>
