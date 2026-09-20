@@ -205,6 +205,150 @@
 }
 
 /*
+ * Hero atmosphere (components/ui/particle-hero.tsx). Cold silver light falling from the upper
+ * right, hairlines on the layout edges, drifting dust. Colours come from the tokens only, so
+ * the hero stays neutral (no blue or gold). Sway animates transform and opacity only; it is
+ * off for reduced motion and paused while the hero is off screen (`data-atmosphere="paused"`).
+ */
+.hero-bloom {
+  background-image: radial-gradient(
+    ellipse 60% 50% at 66% 0%,
+    color-mix(in srgb, var(--color-silver) 10%, transparent),
+    transparent 70%
+  );
+}
+
+.hero-beam {
+  position: absolute;
+  top: -3rem;
+  left: 66%;
+  width: min(44rem, 120vw);
+  height: 92%;
+  margin-left: calc(min(44rem, 120vw) / -2);
+  transform-origin: 50% 0;
+  transform: rotate(var(--r));
+  opacity: 0.85;
+  background-image: conic-gradient(
+    from 0deg at 50% -5%,
+    transparent 44%,
+    color-mix(in srgb, var(--color-silver) 12%, transparent) 48.5%,
+    color-mix(in srgb, var(--color-silver) 24%, transparent) 50%,
+    color-mix(in srgb, var(--color-silver) 12%, transparent) 51.5%,
+    transparent 56%
+  );
+  mask-image: linear-gradient(to bottom, black 30%, transparent 92%);
+}
+
+.hero-beam[data-beam="a"] {
+  --r: 22deg;
+}
+
+.hero-beam[data-beam="b"] {
+  --r: -18deg;
+}
+
+.hero-beam[data-beam="c"] {
+  --r: 3deg;
+}
+
+.hero-line-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform-origin: top;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--color-silver) 16%, transparent) 25%,
+    color-mix(in srgb, var(--color-silver) 16%, transparent) 75%,
+    transparent
+  );
+}
+
+.hero-line-v[data-side="left"] {
+  left: max(0.5rem, calc(50% - 36rem));
+}
+
+.hero-line-v[data-side="right"] {
+  right: max(0.5rem, calc(50% - 36rem));
+}
+
+.hero-line-h {
+  position: absolute;
+  inset-inline: 0;
+  top: 6.5rem;
+  height: 1px;
+  transform-origin: left;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-silver) 14%, transparent),
+    transparent
+  );
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-line-draw-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes hero-line-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes hero-beam-sway {
+  0%,
+  100% {
+    transform: rotate(var(--r)) scale(1);
+    opacity: 0.85;
+  }
+  33% {
+    transform: rotate(calc(var(--r) - 2deg)) scale(1.12);
+    opacity: 1;
+  }
+  66% {
+    transform: rotate(calc(var(--r) + 2deg)) scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-fade {
+    animation: hero-fade 2.2s ease-out 0.2s backwards;
+  }
+  .hero-beam {
+    will-change: transform, opacity;
+    animation: hero-beam-sway 17s ease-in-out infinite;
+  }
+  .hero-beam[data-beam="b"] {
+    animation-duration: 14s;
+  }
+  .hero-beam[data-beam="c"] {
+    animation-duration: 21s;
+    animation-direction: reverse;
+  }
+  .hero-line-v {
+    animation: hero-line-draw-y 1.6s cubic-bezier(0.215, 0.61, 0.355, 1) 1.2s backwards;
+  }
+  .hero-line-h {
+    animation: hero-line-draw-x 1.6s cubic-bezier(0.215, 0.61, 0.355, 1) 1.5s backwards;
+  }
+  [data-atmosphere="paused"] .hero-beam {
+    animation-play-state: paused;
+  }
+}
+
+/*
  * Start states for scroll reveals (Reveal). Applied only when scripting is on and motion is
  * allowed, so no-JS and reduced-motion visitors see everything, and the SSR page never
  * flashes before GSAP takes over. `data-reveal` hides the block itself; `data-reveal-group`

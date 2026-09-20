@@ -1,3 +1,4 @@
+import { ParticleHero } from "@/components/ui/particle-hero";
 import { HERO_COPY, SECTION_IDS, SITE } from "@/lib/constants";
 
 export default function Hero() {
@@ -11,7 +12,8 @@ export default function Hero() {
         aria-hidden
         className="texture-dotgrid pointer-events-none absolute inset-0 -z-10 opacity-10"
       />
-      <div className="mx-auto w-full max-w-6xl px-4">
+      <ParticleHero />
+      <div data-hero-content className="mx-auto w-full max-w-6xl px-4">
         <p
           data-hero="tag"
           className="inline-block border-2 border-bone px-3 py-1 text-xs font-bold tracking-widest uppercase"
