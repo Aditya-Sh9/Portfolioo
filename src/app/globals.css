@@ -147,6 +147,82 @@
 }
 
 /*
+ * Spotlight card (components/ui/spotlight-card.tsx). Two overlay layers per card, each a
+ * clipped box holding one soft blob that only ever moves by `transform` (the pointer position
+ * arrives as --sx / --sy) and fades by `opacity`. The wash is the active accent at the panel
+ * tint strength (so white stays quieter than red or blue). The rim is the same blob masked down
+ * to the 2px border ring, accent with a small core of the highlight. Hover-capable, fine
+ * pointers only; touch and keyboard never see it. Cards using it have a 2px border.
+ */
+.spotlight {
+  --spot-border: 2px;
+}
+
+.spotlight-layer {
+  position: absolute;
+  z-index: 10;
+  inset: calc(var(--spot-border) * -1);
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease-out;
+}
+
+.spotlight-layer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--spot-size);
+  height: var(--spot-size);
+  transform: translate3d(
+    calc(var(--sx, 0px) - 50%),
+    calc(var(--sy, 0px) - 50%),
+    0
+  );
+}
+
+.spotlight-wash {
+  --spot-size: 30rem;
+}
+
+.spotlight-wash::before {
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) calc(var(--tint) * 0.75), transparent),
+    transparent
+  );
+}
+
+.spotlight-rim {
+  --spot-size: 20rem;
+  padding: var(--spot-border);
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+}
+
+.spotlight-rim::before {
+  background-image:
+    radial-gradient(
+      closest-side,
+      color-mix(in srgb, var(--highlight) 90%, transparent),
+      transparent 30%
+    ),
+    radial-gradient(closest-side, var(--accent), transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight:hover > .spotlight-layer {
+    opacity: 1;
+  }
+
+  .spotlight:hover > .spotlight-layer::before {
+    will-change: transform;
+  }
+}
+
+/*
  * Hero entrance (~1.4s, one time). Pure CSS on purpose: it runs on the first painted frame
  * instead of waiting for hydration, so the hero is never hidden and LCP is not delayed. The
  * name only moves (never fades), so the largest text is visible from the first paint; the

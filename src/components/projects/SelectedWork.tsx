@@ -2,6 +2,7 @@ import Reveal from "@/animations/gsap/Reveal";
 import Section from "@/components/layout/Section";
 import ProjectLinks from "@/components/projects/ProjectLinks";
 import FactList from "@/components/ui/FactList";
+import SpotlightCard from "@/components/ui/spotlight-card";
 import TagList from "@/components/ui/TagList";
 import { PROJECTS } from "@/data/projects";
 import { SECTION_IDS } from "@/lib/constants";
@@ -23,12 +24,13 @@ export default function SelectedWork() {
                 addressable by `id` / `data-project`, and `data-web-anchor` marks the title
                 panel, the stable edge the web will attach to. No behaviour is wired yet.
               */}
-                <article
+                <SpotlightCard
+                  as="article"
                   id={`project-${project.slug}`}
                   data-project={project.slug}
                   data-accent={project.accent}
                   data-highlight={project.highlight}
-                  className="grid border-2 border-steel bg-charcoal transition-colors duration-150 hover:border-interactive md:grid-cols-12"
+                  className="grid border-2 border-steel bg-charcoal md:grid-cols-12"
                 >
                   <div
                     data-web-anchor
@@ -77,7 +79,7 @@ export default function SelectedWork() {
                       <ProjectLinks project={project} />
                     </div>
                   </div>
-                </article>
+                </SpotlightCard>
               </Reveal>
             </li>
           );

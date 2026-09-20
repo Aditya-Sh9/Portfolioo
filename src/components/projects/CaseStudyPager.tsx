@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Reveal from "@/animations/gsap/Reveal";
+import SpotlightCard from "@/components/ui/spotlight-card";
 import type { Project } from "@/data/projects";
 
 /**
@@ -43,28 +44,33 @@ function PagerLink({
   const isNext = direction === "next";
 
   return (
-    <Link
-      href={`/projects/${project.slug}`}
+    <SpotlightCard
       data-accent={project.accent}
       data-highlight={project.highlight}
-      className={`panel-tint group relative isolate flex flex-col gap-6 overflow-hidden border-2 border-steel bg-ink p-6 transition-colors duration-150 hover:border-interactive md:p-8 ${isNext ? "md:text-right" : ""}`}
+      className="panel-tint border-2 border-steel bg-ink"
     >
-      <span
-        className={`flex items-center gap-3 text-xs font-bold tracking-widest text-silver uppercase ${isNext ? "md:flex-row-reverse" : ""}`}
+      {/* The link fills the card; its focus ring sits just inside the border so nothing clips it. */}
+      <Link
+        href={`/projects/${project.slug}`}
+        className={`flex h-full flex-col gap-6 p-6 -outline-offset-2 md:p-8 ${isNext ? "md:text-right" : ""}`}
       >
-        {isNext ? (
-          <ArrowRight aria-hidden size={16} className="text-interactive" />
-        ) : (
-          <ArrowLeft aria-hidden size={16} className="text-interactive" />
-        )}
-        {isNext ? "Next case study" : "Previous case study"}
-      </span>
-      <span className="font-display text-6xl leading-[0.85] tracking-wide md:text-8xl">
-        {project.title}
-      </span>
-      <span className="text-xs font-bold tracking-widest text-silver uppercase">
-        {project.category}
-      </span>
-    </Link>
+        <span
+          className={`flex items-center gap-3 text-xs font-bold tracking-widest text-silver uppercase ${isNext ? "md:flex-row-reverse" : ""}`}
+        >
+          {isNext ? (
+            <ArrowRight aria-hidden size={16} className="text-interactive" />
+          ) : (
+            <ArrowLeft aria-hidden size={16} className="text-interactive" />
+          )}
+          {isNext ? "Next case study" : "Previous case study"}
+        </span>
+        <span className="font-display text-6xl leading-[0.85] tracking-wide md:text-8xl">
+          {project.title}
+        </span>
+        <span className="text-xs font-bold tracking-widest text-silver uppercase">
+          {project.category}
+        </span>
+      </Link>
+    </SpotlightCard>
   );
 }

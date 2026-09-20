@@ -3,6 +3,7 @@ import Section from "@/components/layout/Section";
 import PhaseList from "@/components/projects/PhaseList";
 import ProjectLinks from "@/components/projects/ProjectLinks";
 import FactList from "@/components/ui/FactList";
+import SpotlightCard from "@/components/ui/spotlight-card";
 import TagList from "@/components/ui/TagList";
 import { SOLACE } from "@/data/projects";
 import { SECTION_IDS } from "@/lib/constants";
@@ -14,7 +15,8 @@ export default function CurrentlyBuilding() {
   return (
     <Section id={SECTION_IDS.building} index="03" title="Currently Building">
       <Reveal className="mt-10">
-        <article
+        <SpotlightCard
+          as="article"
           data-accent={project.accent}
           data-highlight={project.highlight}
           className="border-2 border-bone bg-charcoal shadow-brutal"
@@ -69,7 +71,7 @@ export default function CurrentlyBuilding() {
               <PhaseList phases={project.phases} className="mt-6" />
             </div>
           </div>
-        </article>
+        </SpotlightCard>
       </Reveal>
     </Section>
   );
