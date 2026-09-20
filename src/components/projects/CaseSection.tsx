@@ -20,7 +20,7 @@ export default function CaseSection({ index, title, children }: CaseSectionProps
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 lg:grid-cols-12 lg:gap-16">
         <Reveal className="lg:col-span-4">
           <p className="text-xs font-bold tracking-widest text-silver uppercase">
-            <span className="text-accent">{index}</span>
+            <span className="text-bone">{index}</span>
           </p>
           <h2
             id={headingId}

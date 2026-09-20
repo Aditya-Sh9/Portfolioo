@@ -27,7 +27,7 @@ export default function Contact() {
       title="Contact"
       titleStyle="label"
       compact
-      className="relative isolate overflow-hidden"
+      field="none"
     >
       <div aria-hidden className="contact-glow absolute inset-0 -z-10" />
 
@@ -57,7 +57,7 @@ export default function Contact() {
             className="@container flex flex-col gap-6 p-5 -outline-offset-4 md:gap-8 md:p-6"
           >
             <span className="text-xs font-bold tracking-widest text-silver uppercase">
-              <span className="text-accent">01</span> / {TOTAL} · Email
+              <span className="text-bone">01</span> / {TOTAL} · Email
             </span>
             <span className="flex items-end justify-between gap-4">
               {/* Sized from the card's own width; it may wrap at the @ on narrow screens. */}
@@ -106,8 +106,8 @@ export default function Contact() {
                 </span>
                 <span className="flex shrink-0 flex-col items-end gap-1.5 text-xs font-bold tracking-widest text-silver uppercase">
                   <span aria-hidden className="hidden sm:block">
-                    <span className="text-accent">{String(i + 2).padStart(2, "0")}</span>{" "}
-                    / {TOTAL}
+                    <span className="text-bone">{String(i + 2).padStart(2, "0")}</span> /{" "}
+                    {TOTAL}
                   </span>
                   <ArrowUpRight
                     aria-hidden

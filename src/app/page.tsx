@@ -20,7 +20,7 @@ export default function Home() {
       <HowIBuild />
       {/* Placeholder: replaced once Aditya supplies the images. */}
       <Section id={SECTION_IDS.beyond} index="07" title="Beyond the Screen">
-        <p className="mt-6 max-w-md text-silver">Content coming soon.</p>
+        <p className="mt-6 max-w-md text-silver">A look at life beyond the code, coming soon.</p>
       </Section>
       <WhyIBuild />
       <Contact />

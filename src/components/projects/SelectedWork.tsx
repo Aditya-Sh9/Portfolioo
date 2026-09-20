@@ -30,7 +30,8 @@ export default function SelectedWork() {
                   data-project={project.slug}
                   data-accent={project.accent}
                   data-highlight={project.highlight}
-                  className="grid border-2 border-steel bg-charcoal md:grid-cols-12"
+                  data-cut={flipped ? "tr" : "tl"}
+                  className="panel-cut grid border-2 border-steel bg-charcoal md:grid-cols-12"
                 >
                   <div
                     data-web-anchor
@@ -41,9 +42,7 @@ export default function SelectedWork() {
                       className="texture-halftone absolute inset-0 -z-10 opacity-60"
                     />
                     <p className="text-xs font-bold tracking-widest text-silver uppercase">
-                      <span className="text-accent">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>{" "}
+                      <span className="text-bone">{String(i + 1).padStart(2, "0")}</span>{" "}
                       / {String(PROJECTS.length).padStart(2, "0")}
                     </p>
                     {/* Sized from the panel's own width so the title can never clip. */}

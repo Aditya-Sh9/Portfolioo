@@ -43,28 +43,35 @@ export default function About() {
 /**
  * The photo is pre-cropped to 4:5 (public/images/about-portrait.webp) with the forest kept
  * and Aditya low and to the right. The dark treatment is CSS only, so it stays tunable:
- * a mild filter on the image plus an ink gradient from the bottom and left edges.
+ * a mild filter on the image, an ink gradient from the bottom and left edges, and a halftone
+ * of ink dots over the dark end so it reads as printed. Crop marks frame it like a trimmed page.
  */
 function PortraitSlot() {
   return (
     <Reveal delay={0.12} className="lg:col-span-5">
       <figure>
-        <div className="relative aspect-[4/5] w-full max-w-md overflow-hidden border-2 border-bone bg-charcoal shadow-brutal-sm lg:ml-auto lg:max-w-none">
-          <Image
-            src="/images/about-portrait.webp"
-            alt="Aditya Sharma sitting on a rock in a pine forest, looking off to the left."
-            fill
-            sizes="(min-width: 1024px) 480px, (min-width: 448px) 448px, 100vw"
-            className="object-cover brightness-[0.85] contrast-105 saturate-[0.85]"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-t from-ink/70 via-ink/10 to-transparent"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-r from-ink/40 to-transparent to-50%"
-          />
+        <div className="crop-marks w-full max-w-md lg:ml-auto lg:max-w-none">
+          <div className="relative aspect-[4/5] w-full overflow-hidden border-2 border-bone bg-charcoal shadow-brutal-sm">
+            <Image
+              src="/images/about-portrait.webp"
+              alt="Aditya Sharma sitting on a rock in a pine forest, looking off to the left."
+              fill
+              sizes="(min-width: 1024px) 480px, (min-width: 448px) 448px, 100vw"
+              className="object-cover brightness-[0.85] contrast-105 saturate-[0.85]"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-linear-to-t from-ink/70 via-ink/10 to-transparent"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-linear-to-r from-ink/40 to-transparent to-50%"
+            />
+            <div
+              aria-hidden="true"
+              className="halftone-shade absolute inset-0 opacity-40"
+            />
+          </div>
         </div>
         <figcaption className="mt-4 flex items-center gap-3 text-xs font-bold tracking-widest text-silver uppercase lg:justify-end">
           <span aria-hidden="true" className="h-2 w-2 bg-highlight" />

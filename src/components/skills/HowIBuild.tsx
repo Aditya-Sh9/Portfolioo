@@ -37,7 +37,7 @@ export default function HowIBuild() {
               className="h-full border-2 border-steel bg-charcoal p-6 transition-transform duration-150 group-hover:-translate-y-1 md:p-8"
             >
               <p className="text-xs font-bold tracking-widest text-silver uppercase">
-                <span className="text-accent">{String(i + 1).padStart(2, "0")}</span> /{" "}
+                <span className="text-bone">{String(i + 1).padStart(2, "0")}</span> /{" "}
                 {String(SKILL_GROUPS.length).padStart(2, "0")}
               </p>
               <h3 className="mt-4 font-display text-6xl leading-[0.85] tracking-wide text-balance">
@@ -60,7 +60,7 @@ export default function HowIBuild() {
       <Reveal className="mt-6">
         <div className="border-2 border-steel bg-ink p-6 md:flex md:items-baseline md:gap-10 md:p-8">
           <h3 className="text-xs font-bold tracking-widest text-silver uppercase">
-            <span className="text-accent">Core</span> / Foundations
+            <span className="text-bone">Core</span> / Foundations
           </h3>
           <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-3 md:mt-0">
             {CORE_FOUNDATIONS.map((item) => (

@@ -2,24 +2,33 @@ import Reveal from "@/animations/gsap/Reveal";
 import Section from "@/components/layout/Section";
 import PhaseList from "@/components/projects/PhaseList";
 import ProjectLinks from "@/components/projects/ProjectLinks";
-import FactList from "@/components/ui/FactList";
 import SpotlightCard from "@/components/ui/spotlight-card";
 import TagList from "@/components/ui/TagList";
 import { SOLACE } from "@/data/projects";
 import { SECTION_IDS } from "@/lib/constants";
 
-/** Feature panel for the primary active project (SOLACE), with its build roadmap. */
+/**
+ * Feature panel for the primary active project (SOLACE): what is happening now (its status,
+ * the voice of the product, the roadmap). What the project is, and its figures, live once, in
+ * Selected Work. The card has the angular corner cut and the section carries a few speed lines
+ * (motion = "now").
+ */
 export default function CurrentlyBuilding() {
   const project = SOLACE;
 
   return (
-    <Section id={SECTION_IDS.building} index="03" title="Currently Building">
+    <Section
+      id={SECTION_IDS.building}
+      index="03"
+      title="Currently Building"
+      field="speed"
+    >
       <Reveal className="mt-10">
         <SpotlightCard
           as="article"
           data-accent={project.accent}
           data-highlight={project.highlight}
-          className="border-2 border-bone bg-charcoal shadow-brutal"
+          className="panel-cut border-2 border-bone bg-charcoal shadow-brutal [--cut-line:var(--color-bone)]"
         >
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b-2 border-steel px-6 py-3 text-xs font-bold tracking-widest text-silver uppercase md:px-10">
             <p className="flex items-center gap-3">
@@ -42,13 +51,7 @@ export default function CurrentlyBuilding() {
               <blockquote className="mt-8 max-w-xl border-l-2 border-accent pl-4 text-xl leading-snug text-bone md:text-2xl">
                 <p>{project.tagline}</p>
               </blockquote>
-              <p className="mt-6 max-w-xl leading-relaxed text-silver">
-                {project.description}
-              </p>
 
-              <div className="mt-10 max-w-xl">
-                <FactList facts={project.facts} variant="project" />
-              </div>
               <div className="mt-8 max-w-xl">
                 <TagList items={project.stack} label="Tech stack" />
               </div>
@@ -63,7 +66,7 @@ export default function CurrentlyBuilding() {
                 className="texture-halftone absolute inset-0 -z-10 hidden opacity-60 lg:block"
               />
               <h4 className="text-xs font-bold tracking-widest text-silver uppercase">
-                <span className="text-accent">Roadmap</span> / Phases 0–7
+                <span className="text-bone">Roadmap</span> / Phases 0–7
               </h4>
               <p className="mt-2 text-sm text-silver">
                 Progress as recorded in the project README.

@@ -134,15 +134,15 @@
 
 /*
  * Comic halftone in the active accent, fading out from the bottom-right corner. Native CSS,
- * no asset. Static, and only ever a low-opacity layer on a project panel.
+ * no asset. Static, and only ever a low-opacity layer on a project panel. Two dot grids offset
+ * by half a cell make the 45-degree screen of a real halftone, not a square grid.
  */
 .texture-halftone {
-  background-image: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) var(--halftone), transparent) 1.6px,
-    transparent 2px
-  );
-  background-size: 12px 12px;
+  --dot: color-mix(in srgb, var(--accent) var(--halftone), transparent);
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--dot) 1.3px, transparent 1.8px),
+    radial-gradient(circle at 75% 75%, var(--dot) 1.3px, transparent 1.8px);
+  background-size: 16px 16px;
   mask-image: linear-gradient(to top left, #000 0%, transparent 55%);
 }
 
@@ -178,6 +178,259 @@
 }
 
 /*
+ * Comic print language. The site is laid out like a modern graphic novel: panels with ink
+ * borders and offset shadows, a halftone screen, hatching, registration marks, a caption tab on
+ * every panel edge. Everything below is a static, decorative layer built from the existing tokens
+ * only (neutrals by default; the accent only where a component already carried it): no new
+ * colours, no images, no JavaScript and no motion. Decorative markup is aria-hidden and
+ * pointer-events: none. Sparing on purpose: each device appears in a few places, not everywhere.
+ */
+
+/*
+ * Section backdrop (components/layout/Section.tsx). A neutral halftone screen falling from one
+ * top corner (the side alternates down the page), and on `data-speed` sections a faint fan of
+ * impact lines radiating from that same corner. Sits behind the content, inside the section.
+ */
+.section-field {
+  --fx: 100%;
+  --dot: color-mix(in srgb, var(--color-silver) 30%, transparent);
+  --line: color-mix(in srgb, var(--color-silver) 22%, transparent);
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-field[data-side="left"] {
+  --fx: 0%;
+}
+
+.section-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--dot) 1.3px, transparent 1.8px),
+    radial-gradient(circle at 75% 75%, var(--dot) 1.3px, transparent 1.8px);
+  background-size: 16px 16px;
+  mask-image: radial-gradient(ellipse 60% 65% at var(--fx) 0%, #000, transparent 70%);
+}
+
+.section-field[data-speed]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Two fans of hairline rays with different spacing, so they never look like a grid. */
+  background-image:
+    repeating-conic-gradient(
+      from 90deg at var(--fx) 0%,
+      transparent 0deg 2.55deg,
+      var(--line) 2.75deg,
+      transparent 2.95deg
+    ),
+    repeating-conic-gradient(
+      from 90deg at var(--fx) 0%,
+      transparent 0deg 6.05deg,
+      var(--line) 6.25deg,
+      transparent 6.45deg
+    );
+  mask-image: radial-gradient(ellipse 42% 62% at var(--fx) 0%, #000, transparent 100%);
+}
+
+/*
+ * Registration mark (a ring and crosshair, as printers use to line up colour plates) and
+ * hatching (parallel ink strokes). Both draw in `currentColor`, so the parent sets the tone.
+ */
+.reg-mark {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.reg-mark::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.reg-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat;
+}
+
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    currentColor 0 1.5px,
+    transparent 1.5px 5px
+  );
+}
+
+/* The hero's two registration marks sit where its hairlines cross (see .hero-line-v / -h). */
+.hero-reg {
+  position: absolute;
+  top: 6.5rem;
+  margin-top: -0.5625rem;
+  color: color-mix(in srgb, var(--color-silver) 45%, transparent);
+}
+
+.hero-reg[data-side="left"] {
+  left: max(0.5rem, calc(50% - 36rem));
+  margin-left: -0.5625rem;
+}
+
+.hero-reg[data-side="right"] {
+  right: max(0.5rem, calc(50% - 36rem));
+  margin-right: -0.5625rem;
+}
+
+/*
+ * Crop marks: four small corner ticks just outside a framed image, like the trim marks on a
+ * printed page. The host must not clip its overflow.
+ */
+.crop-marks {
+  --crop: color-mix(in srgb, var(--color-silver) 55%, transparent);
+  position: relative;
+}
+
+.crop-marks::before {
+  content: "";
+  position: absolute;
+  inset: -0.75rem;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--crop), var(--crop)) top left / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) top left / 1px 0.875rem no-repeat,
+    linear-gradient(var(--crop), var(--crop)) top right / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) top right / 1px 0.875rem no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom left / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom left / 1px 0.875rem no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom right / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom right / 1px 0.875rem no-repeat;
+}
+
+/* Ink dots over the dark end of a photograph, so it reads as printed rather than screened. */
+.halftone-shade {
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--color-ink) 1.5px, transparent 2.1px),
+    radial-gradient(circle at 75% 75%, var(--color-ink) 1.5px, transparent 2.1px);
+  background-size: 9px 9px;
+  mask-image: linear-gradient(to top, #000 0%, transparent 48%);
+}
+
+/*
+ * Angular panel cut. One corner of a card is sliced off on the diagonal: an ink triangle (the
+ * page colour) with a single rule along the cut, drawn over the card's own 2px border, so it
+ * works with any border, shadow or spotlight. `data-cut="tr"` cuts the top-right instead of the
+ * top-left (from the md breakpoint up, where a flipped card's title panel moves to the right).
+ * Set --cut-line to match the card's border colour.
+ */
+.panel-cut {
+  --cut: 1.75rem;
+  --cut-line: var(--color-steel);
+  position: relative;
+}
+
+.panel-cut::after {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  top: -2px;
+  left: -2px;
+  width: var(--cut);
+  height: var(--cut);
+  pointer-events: none;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-ink) calc(50% - 1px),
+    var(--cut-line) calc(50% - 1px) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
+}
+
+@media (min-width: 48rem) {
+  .panel-cut[data-cut="tr"]::after {
+    left: auto;
+    right: -2px;
+    background-image: linear-gradient(
+      225deg,
+      var(--color-ink) calc(50% - 1px),
+      var(--cut-line) calc(50% - 1px) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
+  }
+}
+
+/*
+ * Speech bubble (the hero quote): a square-cornered balloon with a hard offset shadow and a
+ * tail notched into one edge (a rotated square that borrows the balloon's fill). The tail
+ * points up when the quote sits under the copy, and left when it sits beside it.
+ */
+.speech {
+  position: relative;
+  border: 2px solid var(--color-silver);
+  background-color: var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-steel);
+}
+
+.speech::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 1.5rem;
+  width: 14px;
+  height: 14px;
+  background-color: var(--color-ink);
+  border-top: 2px solid var(--color-silver);
+  border-left: 2px solid var(--color-silver);
+  transform: rotate(45deg);
+}
+
+@media (min-width: 48rem) {
+  .speech::before {
+    top: 1.25rem;
+    left: -8px;
+    transform: rotate(-45deg);
+  }
+}
+
+/* Lettering with a slight misregistered print offset: a second, darker impression under the type. */
+.print-offset {
+  text-shadow: 0.022em 0.022em 0 var(--color-steel);
+}
+
+/*
+ * Printed-page grain: a fixed, static layer of fine specks over the whole page, faint enough
+ * that it only reads as paper tooth. One compositor layer, never repainted; off for users who
+ * ask for more contrast, and in print.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 4 -2.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@media (prefers-contrast: more), print {
+  body::after {
+    display: none;
+  }
+}
+
+/*
  * Technology rail (components/skills/TechRail.tsx). The track holds two identical groups and
  * slides left by half its own width, i.e. exactly one group (each group ends in the same gap
  * that separates its tiles), so the loop has no seam. transform only, one compositor layer,
@@ -202,6 +455,18 @@
   flex: none;
   gap: 0.75rem;
   padding-right: 0.75rem;
+}
+
+/* Pause control (RailToggle) flips data-paused on the panel; the hover pause below stays. */
+[data-rail][data-paused="true"] .tech-rail-track {
+  animation-play-state: paused;
+}
+
+/* Nothing to pause without JavaScript. Reduced motion hides it below. */
+@media (scripting: none) {
+  .rail-toggle {
+    display: none;
+  }
 }
 
 @keyframes tech-rail {
@@ -233,6 +498,10 @@
     flex-wrap: wrap;
     row-gap: 0.75rem;
     padding-right: 0;
+  }
+
+  .rail-toggle {
+    display: none;
   }
 
   .tech-rail-copy {

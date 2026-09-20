@@ -21,7 +21,7 @@ export default function CaseStudyHeader({ project }: { project: Project }) {
         <Link
           href="/#work"
           data-hero="tag"
-          className="inline-flex items-center gap-2 border-2 border-steel px-3 py-1.5 text-xs font-bold tracking-widest text-silver uppercase transition-colors duration-150 hover:border-interactive hover:text-bone"
+          className="inline-flex items-center gap-2 border-2 border-steel px-3 py-1.5 text-xs font-bold tracking-widest text-silver uppercase transition-colors duration-150 hover:border-interactive hover:text-bone pointer-coarse:min-h-11"
         >
           <ArrowLeft aria-hidden size={14} className="text-interactive" />
           Selected Work
@@ -33,7 +33,7 @@ export default function CaseStudyHeader({ project }: { project: Project }) {
             {status}
           </span>
           <span>{period}</span>
-          <span className="text-accent">{category}</span>
+          <span className="text-bone">{category}</span>
         </p>
 
         <h1

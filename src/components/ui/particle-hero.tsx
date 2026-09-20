@@ -190,6 +190,8 @@ export function ParticleHero() {
         <div className="hero-line-v" data-side="left" />
         <div className="hero-line-v" data-side="right" />
         <div className="hero-line-h" />
+        <span aria-hidden className="reg-mark hero-reg hero-fade" data-side="left" />
+        <span aria-hidden className="reg-mark hero-reg hero-fade" data-side="right" />
       </div>
     </div>
   );

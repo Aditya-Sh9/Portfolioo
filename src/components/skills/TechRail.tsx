@@ -1,4 +1,5 @@
 import Reveal from "@/animations/gsap/Reveal";
+import RailToggle from "@/components/skills/RailToggle";
 import TechLogo from "@/components/ui/TechLogo";
 import { TECH_RAIL } from "@/data/skills";
 import { techFor } from "@/data/tech";
@@ -13,19 +14,21 @@ const RAIL = TECH_RAIL.flatMap((name) => {
  * track holds two identical groups and slides left by exactly one group, so the loop is
  * seamless with no JavaScript and no React state. The second group is a decoration and hidden
  * from assistive tech; the first is the real list, with each logo's name as its label.
+ * `RailToggle` (the one client leaf) is the pause control on the panel's right end.
  * Motion, edge fades and the reduced-motion fallback (a static, wrapped grid) are in
  * globals.css under "Technology rail".
  */
 export default function TechRail() {
   return (
     <Reveal className="mt-10">
-      <div className="border-2 border-steel bg-ink">
-        <div className="tech-rail py-4">
+      <div data-rail className="flex border-2 border-steel bg-ink">
+        <div className="tech-rail min-w-0 flex-1 py-4">
           <div className="tech-rail-track">
             <RailGroup />
             <RailGroup copy />
           </div>
         </div>
+        <RailToggle />
       </div>
     </Reveal>
   );

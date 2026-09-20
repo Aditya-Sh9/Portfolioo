@@ -5,7 +5,7 @@ import { SECTION_IDS, WHY_COPY } from "@/lib/constants";
 /** Short and reflective: the body in calm type, the closing line as the one loud moment. */
 export default function WhyIBuild() {
   return (
-    <Section id={SECTION_IDS.why} index="08" title="Why I Build">
+    <Section id={SECTION_IDS.why} index="08" title="Why I Build" field="speed">
       {/* The quietest reveal on the page: one block, a shorter lift, a slower ease in. */}
       <Reveal
         y={12}

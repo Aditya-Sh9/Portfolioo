@@ -4,6 +4,7 @@ import type { ComponentType } from "react";
 import CaseStudyHeader from "@/components/projects/CaseStudyHeader";
 import CaseStudyPager from "@/components/projects/CaseStudyPager";
 import { PROJECTS } from "@/data/projects";
+import { OG_IMAGE } from "@/lib/constants";
 
 // Only projects flagged `hasCaseStudy` get a page; anything else is a 404.
 const CASE_STUDIES = PROJECTS.filter((project) => project.hasCaseStudy);
@@ -24,6 +25,14 @@ export async function generateMetadata({
   return {
     title: `${project.title} — Case Study · Aditya Sharma`,
     description: project.description,
+    // A page's own `openGraph` replaces the layout's whole object, so the image is repeated here.
+    openGraph: {
+      type: "article",
+      title: `${project.title} — Case Study · Aditya Sharma`,
+      description: project.description,
+      url: `/projects/${slug}`,
+      images: [OG_IMAGE],
+    },
   };
 }
 

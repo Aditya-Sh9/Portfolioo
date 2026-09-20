@@ -30,7 +30,7 @@ export default function CopyEmail({ email }: { email: string }) {
     <button
       type="button"
       onClick={copy}
-      className="inline-flex min-h-11 items-center gap-2 border-2 border-steel bg-ink px-3 text-xs font-bold tracking-widest text-silver uppercase transition-colors duration-150 hover:border-accent hover:text-bone active:translate-x-px active:translate-y-px md:min-h-9"
+      className="inline-flex min-h-9 items-center gap-2 border-2 border-steel bg-ink px-3 text-xs font-bold tracking-widest text-silver uppercase transition-colors duration-150 hover:border-accent hover:text-bone active:translate-x-px active:translate-y-px pointer-coarse:min-h-11"
     >
       {copied ? (
         <Check aria-hidden size={16} className="text-accent" />
