@@ -6,7 +6,7 @@ const BASE =
 
 /** Shared brutalist link styles; also used for internal links that should match. */
 export const LINK_STYLES = {
-  primary: `${BASE} border-bone text-bone shadow-brutal-sm hover:-translate-x-px hover:-translate-y-px hover:bg-accent`,
+  primary: `${BASE} border-bone text-bone shadow-brutal-sm hover:-translate-x-px hover:-translate-y-px hover:bg-accent hover:text-on-accent`,
   secondary: `${BASE} border-steel text-silver hover:border-interactive hover:text-bone`,
 } as const;
 

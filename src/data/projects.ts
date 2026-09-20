@@ -1,4 +1,4 @@
-export type ProjectAccent = "red" | "blue";
+export type ProjectAccent = "red" | "blue" | "bone";
 /** Secondary highlight (5%). Maps to `data-highlight`; both values are existing palette tokens. */
 export type ProjectHighlight = "gold" | "bone";
 
@@ -95,8 +95,8 @@ export const LEXIUM: Project = {
     { value: "3", label: "User roles" },
     { value: "50+", label: "Test transactions" },
   ],
-  accent: "red",
-  highlight: "bone",
+  accent: "bone",
+  highlight: "gold",
   links: {
     github: "https://github.com/Aditya-Sh9/Lexium",
     live: "https://lexium-law.vercel.app/",
