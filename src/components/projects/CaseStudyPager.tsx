@@ -1,13 +1,14 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import Link from "next/link";
 import Reveal from "@/animations/gsap/Reveal";
+import WebLink from "@/animations/web/WebLink";
 import SpotlightCard from "@/components/ui/spotlight-card";
 import type { Project } from "@/data/projects";
 
 /**
  * Previous / next case study, wrapping around so there are always two destinations. Each
  * panel carries its destination's own accent (`data-accent`), so the next project's identity
- * is visible before you go. This is the pair of edges the spider-web transition will use.
+ * is visible before you go. The panels are the web transition's anchors (`data-web-anchor`):
+ * the web attaches to the clicked one and pulls it away toward the way you are going.
  */
 export default function CaseStudyPager({
   projects,
@@ -45,13 +46,15 @@ function PagerLink({
 
   return (
     <SpotlightCard
+      data-web-anchor
       data-accent={project.accent}
       data-highlight={project.highlight}
       className="panel-tint border-2 border-steel bg-ink"
     >
       {/* The link fills the card; its focus ring sits just inside the border so nothing clips it. */}
-      <Link
+      <WebLink
         href={`/projects/${project.slug}`}
+        direction={direction}
         className={`flex h-full flex-col gap-6 p-6 -outline-offset-2 md:p-8 ${isNext ? "md:text-right" : ""}`}
       >
         <span
@@ -70,7 +73,7 @@ function PagerLink({
         <span className="text-xs font-bold tracking-widest text-silver uppercase">
           {project.category}
         </span>
-      </Link>
+      </WebLink>
     </SpotlightCard>
   );
 }

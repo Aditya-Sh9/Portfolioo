@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Space_Grotesk } from "next/font/google";
 import SmoothScroll from "@/animations/lenis/SmoothScroll";
+import WebTransition from "@/animations/web/WebTransition";
 import Navbar from "@/components/navigation/Navbar";
 import { OG_IMAGE, SITE, SITE_DESCRIPTION } from "@/lib/constants";
 import "./globals.css";
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col">
         <SmoothScroll>
           <Navbar />
+          <WebTransition />
           {children}
         </SmoothScroll>
       </body>

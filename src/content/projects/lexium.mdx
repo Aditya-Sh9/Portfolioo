@@ -33,11 +33,18 @@ Once a consultation is completed, the associated payment enters escrow and can o
 
 <CaseSection index="05" title="Architecture">
 
-<Flow
-  stages={[
-    { nodes: [{ name: "React 19 + Vite + Tailwind CSS", detail: "Vercel" }] },
-    { nodes: [{ name: "Laravel 13 REST API", detail: "Render" }] },
-    { nodes: [{ name: "MongoDB Atlas", detail: "Primary database" }] },
+<ArchitectureDiagram
+  core="api"
+  nodes={[
+    { id: "client", label: "React 19 + Vite", detail: "Vercel", layer: "client" },
+    { id: "api", label: "Laravel 13 REST API", detail: "Render", layer: "core" },
+    { id: "db", label: "MongoDB Atlas", detail: "Primary database", layer: "data" },
+    { id: "auth", label: "Firebase Authentication", detail: "Separate flow for admins", layer: "auth" },
+  ]}
+  edges={[
+    { from: "client", to: "api", kind: "sync" },
+    { from: "api", to: "db", kind: "sync" },
+    { from: "client", to: "auth", label: "citizen / provider identity", kind: "auth" },
   ]}
 />
 

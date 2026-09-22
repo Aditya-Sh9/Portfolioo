@@ -538,11 +538,7 @@ body::after {
   left: 0;
   width: var(--spot-size);
   height: var(--spot-size);
-  transform: translate3d(
-    calc(var(--sx, 0px) - 50%),
-    calc(var(--sy, 0px) - 50%),
-    0
-  );
+  transform: translate3d(calc(var(--sx, 0px) - 50%), calc(var(--sy, 0px) - 50%), 0);
 }
 
 .spotlight-wash {
@@ -803,6 +799,116 @@ body::after {
 }
 
 /*
+ * Web transition (animations/web). Idle, the overlay is hidden and costs nothing. The web is thin
+ * silver strands (drawn with a normalised dash: pathLength 1) that land in ringed nodes; the slab
+ * is page-coloured, leans on its leading edge (the lean is a skew set by GSAP) and carries a bone
+ * rule and a halftone fringe there. Existing tokens only. Only transform, opacity and SVG
+ * geometry are animated. While it runs, the incoming page's CSS entrance is held (`data-hero`),
+ * so it plays as the slab clears rather than underneath it.
+ */
+.web-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  overflow: hidden;
+}
+
+.web-web {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.web-strand {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-silver) 85%, transparent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.web-node {
+  fill: var(--color-ink);
+  stroke: var(--color-bone);
+  stroke-width: 1.5;
+}
+
+.web-slab {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--color-ink);
+  will-change: transform;
+}
+
+.web-slab[data-dir="previous"] {
+  left: auto;
+  right: 0;
+}
+
+.web-slab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(16rem, 40vw);
+  border-left: 2px solid var(--color-bone);
+  background-image:
+    radial-gradient(
+      circle at 25% 25%,
+      color-mix(in srgb, var(--color-silver) 40%, transparent) 1.3px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      color-mix(in srgb, var(--color-silver) 40%, transparent) 1.3px,
+      transparent 1.8px
+    );
+  background-size: 16px 16px;
+  mask-image: linear-gradient(to right, #000, transparent);
+}
+
+.web-slab[data-dir="previous"]::before {
+  left: auto;
+  right: 0;
+  border-left: 0;
+  border-right: 2px solid var(--color-bone);
+  mask-image: linear-gradient(to left, #000, transparent);
+}
+
+html[data-web-transition] [data-hero] {
+  animation-play-state: paused;
+}
+
+/* After a transition focus moves to <main> so assistive tech lands on the new page; no ring. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/*
+ * Section choreography start states (SectionMotion). The section's top rule is drawn from the
+ * left, and its tab, end marks and backdrop fade in as it arrives. Scoped like the reveal states
+ * below: only with scripting on and motion allowed, so everyone else sees the finished section.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-sm="rule"] {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  [data-sm="tab"],
+  [data-sm="end"],
+  [data-sm="field"] {
+    opacity: 0;
+  }
+}
+
+/*
  * Start states for scroll reveals (Reveal). Applied only when scripting is on and motion is
  * allowed, so no-JS and reduced-motion visitors see everything, and the SSR page never
  * flashes before GSAP takes over. `data-reveal` hides the block itself; `data-reveal-group`
@@ -812,6 +918,23 @@ body::after {
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   [data-reveal],
   [data-reveal-group] > * {
+    opacity: 0;
+  }
+}
+
+/*
+ * Architecture diagram (ArchitectureDiagram) start states: node boxes fade/lift in, then edge
+ * labels fade in last. Connecting paths are not listed here — their stroke-dasharray/dashoffset
+ * only exist once JS measures the rendered layout, so with no JS they render as normal solid
+ * lines, already in their final state. Scoped like Reveal: scripting on, motion allowed only.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-arch-node] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  [data-arch-label] {
     opacity: 0;
   }
 }

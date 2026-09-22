@@ -31,17 +31,20 @@ The journal (once built) will never feed any AI/ML layer — that boundary is ar
 
 Three independently deployed services:
 
-<Flow
-  stages={[
-    { nodes: [{ name: "Next.js", detail: "Vercel" }] },
-    { nodes: [{ name: "Express + TypeScript API", detail: "Railway" }] },
-    {
-      nodes: [
-        { name: "Supabase Postgres", detail: "via Prisma" },
-        { name: "Google Gemini Flash" },
-        { name: "Python FastAPI ML service", detail: "Railway" },
-      ],
-    },
+<ArchitectureDiagram
+  core="api"
+  nodes={[
+    { id: "client", label: "Next.js", detail: "Vercel", layer: "client" },
+    { id: "api", label: "Express + TypeScript API", detail: "Railway", layer: "core" },
+    { id: "db", label: "Supabase Postgres", detail: "Postgres + Auth, via Prisma", layer: "data" },
+    { id: "gemini", label: "Google Gemini Flash", layer: "external" },
+    { id: "ml", label: "FastAPI ML service", detail: "Railway, stateless", layer: "service" },
+  ]}
+  edges={[
+    { from: "client", to: "api", kind: "sync" },
+    { from: "api", to: "db", label: "Prisma", kind: "sync" },
+    { from: "api", to: "gemini", label: "insight cards", kind: "sync" },
+    { from: "api", to: "ml", label: "GET /api/patterns, decoupled", kind: "async" },
   ]}
 />
 

@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentPropsWithoutRef } from "react";
+import ArchitectureDiagram from "@/components/projects/ArchitectureDiagram";
 import CaseSection from "@/components/projects/CaseSection";
 import Flow from "@/components/projects/Flow";
 import Note from "@/components/projects/Note";
@@ -36,6 +37,7 @@ const components = {
       {...props}
     />
   ),
+  ArchitectureDiagram,
   CaseSection,
   Flow,
   Note,

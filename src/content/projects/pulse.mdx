@@ -20,16 +20,19 @@ It solves the problem of scattered team communication and delayed task updates b
 
 <CaseSection index="03" title="Architecture">
 
-<Flow
-  stages={[
-    { nodes: [{ name: "React 19 + Vite", detail: "Protected routes via React Router" }] },
-    { nodes: [{ name: "Express API", detail: "Firebase Admin token checks + Socket.io" }] },
-    {
-      nodes: [
-        { name: "MongoDB Atlas", detail: "Tasks, messages, workspaces" },
-        { name: "Firebase Authentication", detail: "Identity" },
-      ],
-    },
+<ArchitectureDiagram
+  core="api"
+  nodes={[
+    { id: "client", label: "React 19 + Vite", detail: "Protected routes via React Router", layer: "client" },
+    { id: "api", label: "Express API", detail: "Socket.io", layer: "core" },
+    { id: "db", label: "MongoDB Atlas", detail: "Tasks, messages, workspaces", layer: "data" },
+    { id: "auth", label: "Firebase Authentication", detail: "Identity", layer: "auth" },
+  ]}
+  edges={[
+    { from: "client", to: "api", label: "REST", kind: "sync" },
+    { from: "api", to: "client", label: "Socket.io broadcast", kind: "async" },
+    { from: "api", to: "db", kind: "sync" },
+    { from: "api", to: "auth", label: "Firebase Admin SDK", kind: "auth" },
   ]}
 />
 

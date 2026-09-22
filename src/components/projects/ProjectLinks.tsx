@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import WebLink from "@/animations/web/WebLink";
 import ExternalLink, { LINK_STYLES } from "@/components/ui/ExternalLink";
 import type { Project } from "@/data/projects";
 
@@ -29,10 +29,14 @@ export default function ProjectLinks({
       </li>
       {hasCaseStudy && showCaseStudy && (
         <li>
-          <Link href={`/projects/${slug}`} className={LINK_STYLES.secondary}>
+          <WebLink
+            href={`/projects/${slug}`}
+            direction="next"
+            className={LINK_STYLES.secondary}
+          >
             Case study
             <ArrowUpRight aria-hidden size={14} className="text-interactive" />
-          </Link>
+          </WebLink>
         </li>
       )}
     </ul>
