@@ -108,6 +108,44 @@
 }
 
 /*
+ * Custom scrollbar. Square (no radius, matching the brutalist chrome), accent thumb inset on a
+ * charcoal track by a steel-coloured border — the same "block on a panel" language as the rest of
+ * the UI. Always the global red accent, on every page: the document scrollbar belongs to `html`,
+ * outside any `[data-accent]` project scope (that's set on `<main>`), so it can't read a project's
+ * own accent — and that's fine, since chrome like the navbar stays neutral on project pages too.
+ * Firefox uses `scrollbar-color`; everything else uses the `::-webkit-scrollbar-*` pseudo-elements.
+ * `scrollbar-gutter` reserves the track's width up front so it never shifts layout.
+ */
+html {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--color-charcoal);
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-charcoal);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border: 3px solid var(--color-charcoal);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--highlight);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: var(--color-charcoal);
+}
+
+/*
  * Hero texture — PatternCraft "Dark White Dotted Grid". Pasted CSS with two changes: the
  * solid black fill is dropped, and the dot alpha (was 0.2) is 1 so overall strength is
  * set once, by the opacity on the layer that uses this class (~10%). Static, never
