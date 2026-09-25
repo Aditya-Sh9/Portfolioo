@@ -1,33 +1,116 @@
 import { SOLACE } from "@/data/projects";
 
-<CaseSection index="01" title="Overview">
+export const sections = [
+  { index: "01", title: "Overview" },
+  { index: "02", title: "What it does" },
+  { index: "03", title: "What it deliberately doesn’t do" },
+  { index: "04", title: "Architecture" },
+  { index: "05", title: "Key decisions" },
+  { index: "06", title: "Challenges" },
+  { index: "07", title: "Quality and safety" },
+  { index: "08", title: "Progress" },
+  { index: "09", title: "What I learned" },
+];
+
+<VideoSlot
+  poster="/projects/solace/landing.webp"
+  title="A 30–40 second walkthrough: sign in, the daily check-in, the dashboard, an insight card and the pattern prediction."
+/>
+
+<CaseSection index="01" title={sections[0].title}>
 
 SOLACE is an emotionally intelligent AI wellness companion. It’s not a medical app and it’s not a chatbot — it’s built to feel like a personal health detective with a warm, human soul: something that helps you notice the quiet, hard-to-name things (low energy, brain fog, mood swings, “just off”) and surfaces honest, non-clinical patterns in your own data, without ever diagnosing or prescribing.
 
-It’s a solo portfolio project, built in public phases, and it’s in active development. Phase 4 of 7 is complete.
+It’s a solo portfolio project, built in public phases, and it’s in active development: Phases 0–4 are complete and Phase 5 is in progress.
+
+### Why I built it
+
+I wanted to explore how AI could be used for wellness without turning into another generic chatbot. The idea came from noticing how difficult it can be to connect things like sleep, stress, energy, mood, and lifestyle into a bigger picture, so I built SOLACE around finding those patterns while keeping the experience non-clinical and human.
+
+### Who it’s for
+
+People who feel that something is “off” but cannot easily explain why, especially students and young professionals dealing with stress, inconsistent routines, and generic wellness advice.
+
+### My role
+
+I designed and built SOLACE end-to-end, including the product flow, architecture, backend/ML separation, data model, AI pipeline, and frontend experience. The hand-drawn visual language was also intentionally designed as part of the product identity, with customized UI components rather than using a generic template.
 
 </CaseSection>
 
-<CaseSection index="02" title="What it does">
+<CaseSection index="02" title={sections[1].title} layout="wide">
 
-- **Daily check-ins** — mood, energy, sleep, water, sunlight, stress, symptoms, food — in under two minutes.
-- **A rule engine** that maps symptom patterns to possible nutrient and lifestyle flags (iron, vitamin D, magnesium, B12, vitamin C, sleep debt, dehydration, sedentary behavior, sustained stress), sourced from peer-reviewed nutrition research.
-- **Gemini-powered insight cards** that turn those flags into warm, specific, hedged language — never “you have a deficiency,” always “there might be a pattern here.”
-- **A personal pattern model** (scikit-learn, trained per-user, stateless) that learns your data after 14+ check-ins and surfaces an honest next-day mood/energy prediction — banded into plain language (“steadier,” “brighter”) rather than raw numbers, and hidden entirely when the model isn’t confident.
+<Screen
+  lead
+  src="/projects/solace/dashboard.webp"
+  width={2000}
+  height={1250}
+  sizes="(min-width: 1152px) 1120px, 100vw"
+  label="Fig. 01"
+  caption="The dashboard: a greeting, today’s check-in, and recent days of mood and energy."
+  alt="SOLACE dashboard in its dark theme: a hand-drawn greeting card reading Good evening, demo, buttons for today’s check-in and the journal, and a hand-drawn line chart of mood and energy over the past month."
+/>
 
-Coming next: a fully client-side encrypted journal the app itself can never read, and a cycle-aware wellness section.
+<Feature
+  index="02"
+  title="Daily check-ins"
+  image={{
+    src: "/projects/solace/checkin.webp",
+    width: 1600,
+    height: 1188,
+    alt: "The SOLACE check-in page: six hand-drawn mood faces, body and mind note chips such as brain fog and low energy, and sliders for energy and sleep.",
+  }}
+>
+
+Mood, energy, sleep, water, sunlight, stress, symptoms, food — in under two minutes.
+
+</Feature>
+
+<Feature
+  index="03"
+  title="Rule engine + Gemini insight cards"
+  reverse
+  image={{
+    src: "/projects/solace/insights.webp",
+    width: 1600,
+    height: 1188,
+    alt: "The SOLACE insights page titled Your patterns, so far, with a not-medical-advice note and insight cards such as A pattern around sunlight.",
+  }}
+>
+
+A rule engine maps symptom patterns to possible nutrient and lifestyle flags (iron, vitamin D, magnesium, B12, vitamin C, sleep debt, dehydration, sedentary behavior, sustained stress), sourced from peer-reviewed nutrition research.
+
+Gemini turns those flags into warm, specific, hedged language — never “you have a deficiency,” always “there might be a pattern here.”
+
+</Feature>
+
+<Feature
+  index="04"
+  title="A personal pattern model"
+  image={{
+    src: "/projects/solace/patterns.webp",
+    width: 1528,
+    height: 1052,
+    alt: "The Your patterns card: next-day mood and energy predictions as plain-language chips, and a list of hedged patterns such as more sleep seems to come with higher energy the next day.",
+  }}
+>
+
+scikit-learn, trained per-user and stateless. It learns your data after 14+ check-ins and surfaces an honest next-day mood/energy prediction — banded into plain language (“steadier,” “brighter”) rather than raw numbers, and hidden entirely when the model isn’t confident.
+
+</Feature>
+
+<Note>Screenshots are from a demo account with 45 days of seeded check-ins, running the current SOLACE build.</Note>
 
 </CaseSection>
 
-<CaseSection index="03" title="What it deliberately doesn’t do">
+<CaseSection index="03" title={sections[2].title}>
 
 No diagnoses. No medical claims. No supplement or affiliate pushing. No dark patterns.
 
-The journal (once built) will never feed any AI/ML layer — that boundary is architectural, not a setting.
+The journal will never feed any AI/ML layer — that boundary is architectural, not a setting.
 
 </CaseSection>
 
-<CaseSection index="04" title="Architecture">
+<CaseSection index="04" title={sections[3].title}>
 
 Three independently deployed services:
 
@@ -49,15 +132,12 @@ Three independently deployed services:
 />
 
 - The frontend never talks to the database, Gemini, or the ML service directly — everything routes through the backend.
-- The ML service is stateless. There are no per-user model files: the backend sends a user’s check-in history with each call and the service trains a small gradient-boosted model in memory, in milliseconds.
-- `GET /api/patterns` is decoupled from the main dashboard load, so a cold ML service never blocks the rest of the app.
-- Journal encryption (Phase 5) will happen entirely in the browser via the Web Crypto API. The server will only ever store ciphertext.
+- `GET /api/patterns` is decoupled from the main dashboard load and has a 4-second timeout: if the ML service is slow, asleep, or fails, the prediction card is silently hidden rather than blocking the dashboard.
+- The journal (Phase 5) is encrypted in the browser using Web Crypto: the key never leaves the client, and the backend stores only ciphertext.
 
 <Note>The backend and ML service run on Railway’s free tier, which sleeps after inactivity — the first request after a while may take a few seconds to wake up.</Note>
 
-</CaseSection>
-
-<CaseSection index="05" title="Stack">
+### Stack
 
 <Spec
   items={[
@@ -72,10 +152,112 @@ Three independently deployed services:
 
 </CaseSection>
 
-<CaseSection index="06" title="Progress">
+<CaseSection index="05" title={sections[4].title} layout="wide">
+
+<DecisionGrid>
+  <Decision
+    n="01"
+    title="A separate Python ML service"
+    why="Python has a much stronger ML ecosystem through libraries like scikit-learn, while TypeScript is better suited to the application’s API and business logic. Keeping it separate also gives the ML layer its own deployment and scaling boundary, while preventing the frontend from ever accessing the ML service directly."
+    tradeoff="It adds another service to develop, deploy, monitor, and communicate with, but the separation gives me cleaner responsibilities and makes the architecture easier to evolve."
+  />
+  <Decision
+    n="02"
+    title="A stateless model, retrained per request"
+    why="The backend sends the user’s complete check-in history to the ML service, which trains the Gradient Boosting models in memory for that request and immediately returns the prediction. This avoids storing model files on Railway’s ephemeral filesystem and keeps the service horizontally scalable."
+    tradeoff="The model has to retrain for every prediction request, so there is some additional CPU/time cost compared with loading a persisted model. With the current small per-user datasets, the training is lightweight enough that the simplicity and reliability are worth it."
+  />
+  <Decision
+    n="03"
+    title="Rule engine decides, Gemini writes"
+    why="The rule engine is responsible for the deterministic wellness signals/flags, while Gemini turns those signals into warm, human-readable insight copy. This keeps the important decision logic deterministic and testable instead of asking an LLM to independently decide whether a user has a particular signal."
+    tradeoff="It requires maintaining two layers instead of letting one AI model do everything, but it gives much better control, testability, and consistency."
+  />
+  <Decision
+    n="04"
+    title="Gemini Flash"
+    why="SOLACE needs fast, lightweight text generation rather than a large reasoning model. It is used mainly for synthesizing already-structured signals into concise, warm insight cards, so a faster model with low inference cost was a better fit. The implementation also includes rate limiting, caching/storage of generated insights, and fallback copy when Gemini is unavailable."
+  />
+  <Decision
+    n="05"
+    title="Supabase with Prisma"
+    why="Supabase gives me managed PostgreSQL plus authentication, while Prisma gives the backend a type-safe ORM and migration workflow. Supabase handles infrastructure/auth while the Express backend retains ownership of database access, instead of allowing the frontend to directly query application data."
+  />
+  <Decision
+    n="06"
+    title="A 14-check-in gate and confidence checks"
+    why="The model is learning an individual’s patterns rather than using a large population dataset, so below fourteen check-ins there simply isn’t enough personal history to justify a prediction. After training, confidence combines sample count, cross-validation stability, correlation agreement, and model variance; the prediction is also hidden on negative R², degenerate output variance, or unstable correlation patterns across bootstrap resamples."
+  />
+</DecisionGrid>
+
+</CaseSection>
+
+<CaseSection index="06" title={sections[5].title}>
+
+<NumberedList
+  items={[
+    {
+      title: "Training a model on very little data per user",
+      body: "The biggest ML challenge was making a personalized model useful without pretending that a small dataset is highly reliable. I used conservative Gradient Boosting hyperparameters, a minimum 14-check-in gate, recency weighting, correlation analysis, permutation-importance cross-checking, bootstrap stability checks, and confidence/sanity gates. If those checks do not produce a sufficiently reliable signal, SOLACE simply hides the prediction instead of forcing an answer.",
+    },
+    {
+      title: "Keeping Gemini from sounding like it was diagnosing someone",
+      body: "Because SOLACE is a wellness product rather than a medical application, I treated the AI output as a constrained generation problem rather than trusting the model’s wording by default. Gemini is given structured signals from the rule engine, prompts are designed around non-clinical language, and generated text passes through a tone validator with 19 banned phrases. There is also fallback copy and a “not medical advice” disclaimer on insight cards.",
+    },
+    {
+      title: "Deferring emotion classification to Phase 7",
+      body: "The Hugging Face emotion model was deferred because the free inference infrastructure was unreliable and the model’s PyTorch memory requirements were too high for Railway’s 512 MB free tier. Rather than compromising the core product around an unreliable dependency, I kept Phase 4 focused on structured check-in data and moved free-text emotion classification to Phase 7.",
+    },
+  ]}
+/>
+
+</CaseSection>
+
+<CaseSection index="07" title={sections[6].title}>
+
+<FactList
+  variant="project"
+  facts={[
+    { value: "149", label: "Automated tests" },
+    { value: "9", label: "Rule-engine rules" },
+    { value: "19", label: "Banned phrases" },
+  ]}
+/>
+
+### Testing
+
+- **89 backend tests (Vitest)** cover the rule engine, the Gemini tone validator and the ML client.
+- **60 ML-service tests (pytest)** cover feature preparation and the model’s training, sanity, stability and confidence gates.
+
+### Rule engine
+
+Nine rules: five deficiency-related rules (iron, vitamin D, magnesium, B12, vitamin C), three lifestyle rules (sleep debt, dehydration, sedentary behaviour) and one sustained-stress rule. The rules are based on peer-reviewed nutritional science, with their sources documented in the project.
+
+### Security and safety
+
+- Supabase authentication with session verification on API routes.
+- Zod validation at API boundaries, and Prisma parameterized queries.
+- Rate limiting, sanitized markdown, and environment-variable separation.
+- Gemini is kept behind the backend rather than being exposed directly to the frontend.
+
+</CaseSection>
+
+<CaseSection index="08" title={sections[7].title}>
 
 <PhaseList phases={SOLACE.phases} />
 
-An emotion-classification layer (reading tone from check-in notes) is intentionally deferred to Phase 7 — free-tier serverless inference wasn’t reliable enough to ship earlier.
+Phase 5 is the private encrypted journal: its encrypted backend is done, and the journal interface is next. The deferred emotion-classification work is planned for Phase 7.
+
+</CaseSection>
+
+<CaseSection index="09" title={sections[8].title}>
+
+<NumberedList
+  items={[
+    { body: "Adding AI to a product is less about calling an LLM and more about designing the system around it — deterministic logic, validation, safety constraints, fallbacks, and clear boundaries matter just as much as the model itself." },
+    { body: "How to design a distributed application where different services have deliberately different responsibilities instead of putting everything into one backend." },
+    { body: "Personalization with small datasets requires being comfortable saying “there isn’t enough evidence yet” instead of forcing the system to produce an answer." },
+  ]}
+/>
 
 </CaseSection>

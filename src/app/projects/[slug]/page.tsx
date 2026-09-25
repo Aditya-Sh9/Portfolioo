@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ComponentType } from "react";
-import CaseStudyHeader from "@/components/projects/CaseStudyHeader";
+import CaseStudyHeader, {
+  type CaseSectionLink,
+} from "@/components/projects/CaseStudyHeader";
 import CaseStudyPager from "@/components/projects/CaseStudyPager";
 import { PROJECTS } from "@/data/projects";
 import { OG_IMAGE } from "@/lib/constants";
@@ -41,8 +43,11 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
   const project = CASE_STUDIES.find((p) => p.slug === slug);
   if (!project) notFound();
 
-  const { default: Body } = (await import(`@/content/projects/${slug}.mdx`)) as {
+  const { default: Body, sections } = (await import(
+    `@/content/projects/${slug}.mdx`
+  )) as {
     default: ComponentType;
+    sections?: readonly CaseSectionLink[];
   };
 
   return (
@@ -52,7 +57,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
       data-highlight={project.highlight}
       className="flex flex-1 flex-col"
     >
-      <CaseStudyHeader project={project} />
+      <CaseStudyHeader project={project} sections={sections} />
       <article>
         <Body />
       </article>

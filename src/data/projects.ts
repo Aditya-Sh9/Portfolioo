@@ -17,11 +17,14 @@ export type Project = {
   accent: ProjectAccent;
   highlight: ProjectHighlight;
   links: { github: string; live?: string };
+  /** Case-study at-a-glance strip; shown only when set. */
+  role?: string;
+  team?: string;
   /** Flip to true when `/projects/<slug>` exists (build step 10); the link is hidden until then. */
   hasCaseStudy: boolean;
 };
 
-export type Phase = { number: number; name: string; done: boolean };
+export type Phase = { number: number; name: string; done: boolean; current?: boolean };
 
 export type ActiveProject = Project & { phases: readonly Phase[] };
 
@@ -56,17 +59,19 @@ export const SOLACE: ActiveProject = {
     github: "https://github.com/Aditya-Sh9/Solace",
     live: "https://solace-frontend-yk6x.vercel.app",
   },
+  role: "Design and development, end to end",
+  team: "Solo",
   hasCaseStudy: true,
-  // Source: Projects.md progress table. Aditya confirmed it is current (2026-09-20). It stays
-  // a labelled roadmap and is not used as a headline fact on the cards.
+  // Source: the SOLACE repo state.md (2026-09-24): Phase 5 sub-phase 5a (encrypted journal
+  // backend) is done, the journal UI is not. It stays a labelled roadmap, never a card headline.
   phases: [
     { number: 0, name: "Monorepo, deploy pipeline, Supabase", done: true },
     { number: 1, name: "Auth + animated onboarding", done: true },
     { number: 2, name: "Daily check-in + dashboard", done: true },
     { number: 3, name: "Rule engine + Gemini insights", done: true },
     { number: 4, name: "Personal ML pattern model", done: true },
-    { number: 5, name: "Encrypted journal", done: false },
-    { number: 6, name: "Cycle-aware wellness section", done: false },
+    { number: 5, name: "Encrypted journal", done: false, current: true },
+    { number: 6, name: "Women’s wellness section", done: false },
     { number: 7, name: "Polish, accessibility, docs, deploy hardening", done: false },
   ],
 };
@@ -101,6 +106,8 @@ export const LEXIUM: Project = {
     github: "https://github.com/Aditya-Sh9/Lexium",
     live: "https://lexium-law.vercel.app/",
   },
+  role: "Design and development, end to end",
+  team: "Solo",
   hasCaseStudy: true,
 };
 
@@ -125,6 +132,8 @@ export const PULSE: Project = {
     github: "https://github.com/Aditya-Sh9/Pulse",
     live: "https://pulse-sigma-amber.vercel.app/",
   },
+  role: "Design and development, end to end",
+  team: "Solo",
   hasCaseStudy: true,
 };
 

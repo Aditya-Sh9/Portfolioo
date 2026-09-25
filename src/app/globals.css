@@ -939,6 +939,20 @@ main[tabindex="-1"]:focus {
   }
 }
 
+/*
+ * Case-study screenshot (Screen): the ink slab is hidden by default and only covers the frame
+ * when GSAP will wipe it away (scripting on, motion allowed).
+ */
+[data-screen-slab] {
+  transform: scaleX(0);
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-screen-slab] {
+    transform: scaleX(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
