@@ -1,9 +1,16 @@
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import WebLink from "@/animations/web/WebLink";
 import ExternalLink, { LINK_STYLES } from "@/components/ui/ExternalLink";
 import type { Project } from "@/data/projects";
 
-export default function ProjectLinks({ project }: { project: Project }) {
+export default function ProjectLinks({
+  project,
+  showCaseStudy = true,
+}: {
+  project: Project;
+  /** False on the case study itself, so it does not link to its own page. */
+  showCaseStudy?: boolean;
+}) {
   const { title, slug, links, hasCaseStudy } = project;
 
   return (
@@ -20,12 +27,16 @@ export default function ProjectLinks({ project }: { project: Project }) {
           GitHub
         </ExternalLink>
       </li>
-      {hasCaseStudy && (
+      {hasCaseStudy && showCaseStudy && (
         <li>
-          <Link href={`/projects/${slug}`} className={LINK_STYLES.secondary}>
+          <WebLink
+            href={`/projects/${slug}`}
+            direction="next"
+            className={LINK_STYLES.secondary}
+          >
             Case study
-            <ArrowUpRight aria-hidden size={14} />
-          </Link>
+            <ArrowUpRight aria-hidden size={14} className="text-interactive" />
+          </WebLink>
         </li>
       )}
     </ul>

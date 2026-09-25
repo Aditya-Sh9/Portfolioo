@@ -28,6 +28,16 @@
 :root {
   --accent: var(--color-hero-red);
   --highlight: var(--color-hero-gold);
+  /* Colour of hover, focus and other interactive detail: blue on the site, the project's own accent inside a project. */
+  --interactive: var(--color-hero-blue);
+  /* Text colour on an accent fill (a white accent needs dark text), and how strongly the accent washes and dots read. */
+  --on-accent: var(--color-bone);
+  --tint: 18%;
+  --halftone: 100%;
+}
+
+[data-accent] {
+  --interactive: var(--accent);
 }
 
 [data-accent="red"] {
@@ -36,6 +46,14 @@
 
 [data-accent="blue"] {
   --accent: var(--color-hero-blue);
+}
+
+/* White is the brightest colour on the page, so it gets dark text on fills and softer washes. */
+[data-accent="bone"] {
+  --accent: var(--color-bone);
+  --on-accent: var(--color-ink);
+  --tint: 8%;
+  --halftone: 40%;
 }
 
 [data-highlight="gold"] {
@@ -51,6 +69,8 @@
   --color-foreground: var(--color-bone);
   --color-accent: var(--accent);
   --color-highlight: var(--highlight);
+  --color-interactive: var(--interactive);
+  --color-on-accent: var(--on-accent);
 
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bebas-neue), "Arial Narrow", Impact, sans-serif;
@@ -78,11 +98,11 @@
 
   ::selection {
     background-color: var(--accent);
-    color: var(--color-bone);
+    color: var(--on-accent);
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--interactive);
     outline-offset: 3px;
   }
 }
@@ -101,13 +121,836 @@
 }
 
 /*
+ * A faint wash of the active accent across a project's title panel, so its identity reads at
+ * a glance (Pulse blue, SOLACE and Lexium red). The same token at low alpha, not a new colour.
+ */
+.panel-tint {
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) var(--tint), transparent),
+    transparent 70%
+  );
+}
+
+/*
  * Comic halftone in the active accent, fading out from the bottom-right corner. Native CSS,
- * no asset. Static, and only ever a low-opacity layer on a project panel.
+ * no asset. Static, and only ever a low-opacity layer on a project panel. Two dot grids offset
+ * by half a cell make the 45-degree screen of a real halftone, not a square grid.
  */
 .texture-halftone {
-  background-image: radial-gradient(circle, var(--accent) 1.6px, transparent 2px);
-  background-size: 12px 12px;
+  --dot: color-mix(in srgb, var(--accent) var(--halftone), transparent);
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--dot) 1.3px, transparent 1.8px),
+    radial-gradient(circle at 75% 75%, var(--dot) 1.3px, transparent 1.8px);
+  background-size: 16px 16px;
   mask-image: linear-gradient(to top left, #000 0%, transparent 55%);
+}
+
+/*
+ * Technology logos (components/ui/TagList.tsx, data/tech.ts). A one-colour SVG used as a mask
+ * over the current text colour, so every logo follows the theme instead of its brand colour.
+ * `--icon` is the `url()` of the file in public/icons/tech.
+ */
+.tech-icon {
+  display: block;
+  flex: none;
+  background-color: currentColor;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+/*
+ * Contact glow (components/contact/Contact.tsx). A soft red haze behind the headline and a
+ * fainter one low on the right, from the accent token at low alpha. Static: no animation, and
+ * it fades out well inside the section so it has no visible edge.
+ */
+.contact-glow {
+  background-image:
+    radial-gradient(
+      ellipse 55% 45% at 18% 22%,
+      color-mix(in srgb, var(--accent) 15%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 40% 28% at 90% 72%,
+      color-mix(in srgb, var(--accent) 8%, transparent),
+      transparent 70%
+    );
+}
+
+/*
+ * Comic print language. The site is laid out like a modern graphic novel: panels with ink
+ * borders and offset shadows, a halftone screen, hatching, registration marks, a caption tab on
+ * every panel edge. Everything below is a static, decorative layer built from the existing tokens
+ * only (neutrals by default; the accent only where a component already carried it): no new
+ * colours, no images, no JavaScript and no motion. Decorative markup is aria-hidden and
+ * pointer-events: none. Sparing on purpose: each device appears in a few places, not everywhere.
+ */
+
+/*
+ * Section backdrop (components/layout/Section.tsx). A neutral halftone screen falling from one
+ * top corner (the side alternates down the page), and on `data-speed` sections a faint fan of
+ * impact lines radiating from that same corner. Sits behind the content, inside the section.
+ */
+.section-field {
+  --fx: 100%;
+  --dot: color-mix(in srgb, var(--color-silver) 30%, transparent);
+  --line: color-mix(in srgb, var(--color-silver) 22%, transparent);
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-field[data-side="left"] {
+  --fx: 0%;
+}
+
+.section-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--dot) 1.3px, transparent 1.8px),
+    radial-gradient(circle at 75% 75%, var(--dot) 1.3px, transparent 1.8px);
+  background-size: 16px 16px;
+  mask-image: radial-gradient(ellipse 60% 65% at var(--fx) 0%, #000, transparent 70%);
+}
+
+.section-field[data-speed]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Two fans of hairline rays with different spacing, so they never look like a grid. */
+  background-image:
+    repeating-conic-gradient(
+      from 90deg at var(--fx) 0%,
+      transparent 0deg 2.55deg,
+      var(--line) 2.75deg,
+      transparent 2.95deg
+    ),
+    repeating-conic-gradient(
+      from 90deg at var(--fx) 0%,
+      transparent 0deg 6.05deg,
+      var(--line) 6.25deg,
+      transparent 6.45deg
+    );
+  mask-image: radial-gradient(ellipse 42% 62% at var(--fx) 0%, #000, transparent 100%);
+}
+
+/*
+ * Registration mark (a ring and crosshair, as printers use to line up colour plates) and
+ * hatching (parallel ink strokes). Both draw in `currentColor`, so the parent sets the tone.
+ */
+.reg-mark {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.reg-mark::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.reg-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat;
+}
+
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    currentColor 0 1.5px,
+    transparent 1.5px 5px
+  );
+}
+
+/* The hero's two registration marks sit where its hairlines cross (see .hero-line-v / -h). */
+.hero-reg {
+  position: absolute;
+  top: 6.5rem;
+  margin-top: -0.5625rem;
+  color: color-mix(in srgb, var(--color-silver) 45%, transparent);
+}
+
+.hero-reg[data-side="left"] {
+  left: max(0.5rem, calc(50% - 36rem));
+  margin-left: -0.5625rem;
+}
+
+.hero-reg[data-side="right"] {
+  right: max(0.5rem, calc(50% - 36rem));
+  margin-right: -0.5625rem;
+}
+
+/*
+ * Crop marks: four small corner ticks just outside a framed image, like the trim marks on a
+ * printed page. The host must not clip its overflow.
+ */
+.crop-marks {
+  --crop: color-mix(in srgb, var(--color-silver) 55%, transparent);
+  position: relative;
+}
+
+.crop-marks::before {
+  content: "";
+  position: absolute;
+  inset: -0.75rem;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--crop), var(--crop)) top left / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) top left / 1px 0.875rem no-repeat,
+    linear-gradient(var(--crop), var(--crop)) top right / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) top right / 1px 0.875rem no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom left / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom left / 1px 0.875rem no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom right / 0.875rem 1px no-repeat,
+    linear-gradient(var(--crop), var(--crop)) bottom right / 1px 0.875rem no-repeat;
+}
+
+/* Ink dots over the dark end of a photograph, so it reads as printed rather than screened. */
+.halftone-shade {
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--color-ink) 1.5px, transparent 2.1px),
+    radial-gradient(circle at 75% 75%, var(--color-ink) 1.5px, transparent 2.1px);
+  background-size: 9px 9px;
+  mask-image: linear-gradient(to top, #000 0%, transparent 48%);
+}
+
+/*
+ * Angular panel cut. One corner of a card is sliced off on the diagonal: an ink triangle (the
+ * page colour) with a single rule along the cut, drawn over the card's own 2px border, so it
+ * works with any border, shadow or spotlight. `data-cut="tr"` cuts the top-right instead of the
+ * top-left (from the md breakpoint up, where a flipped card's title panel moves to the right).
+ * Set --cut-line to match the card's border colour.
+ */
+.panel-cut {
+  --cut: 1.75rem;
+  --cut-line: var(--color-steel);
+  position: relative;
+}
+
+.panel-cut::after {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  top: -2px;
+  left: -2px;
+  width: var(--cut);
+  height: var(--cut);
+  pointer-events: none;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-ink) calc(50% - 1px),
+    var(--cut-line) calc(50% - 1px) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
+}
+
+@media (min-width: 48rem) {
+  .panel-cut[data-cut="tr"]::after {
+    left: auto;
+    right: -2px;
+    background-image: linear-gradient(
+      225deg,
+      var(--color-ink) calc(50% - 1px),
+      var(--cut-line) calc(50% - 1px) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
+  }
+}
+
+/*
+ * Speech bubble (the hero quote): a square-cornered balloon with a hard offset shadow and a
+ * tail notched into one edge (a rotated square that borrows the balloon's fill). The tail
+ * points up when the quote sits under the copy, and left when it sits beside it.
+ */
+.speech {
+  position: relative;
+  border: 2px solid var(--color-silver);
+  background-color: var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-steel);
+}
+
+.speech::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 1.5rem;
+  width: 14px;
+  height: 14px;
+  background-color: var(--color-ink);
+  border-top: 2px solid var(--color-silver);
+  border-left: 2px solid var(--color-silver);
+  transform: rotate(45deg);
+}
+
+@media (min-width: 48rem) {
+  .speech::before {
+    top: 1.25rem;
+    left: -8px;
+    transform: rotate(-45deg);
+  }
+}
+
+/* Lettering with a slight misregistered print offset: a second, darker impression under the type. */
+.print-offset {
+  text-shadow: 0.022em 0.022em 0 var(--color-steel);
+}
+
+/*
+ * Printed-page grain: a fixed, static layer of fine specks over the whole page, faint enough
+ * that it only reads as paper tooth. One compositor layer, never repainted; off for users who
+ * ask for more contrast, and in print.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 4 -2.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@media (prefers-contrast: more), print {
+  body::after {
+    display: none;
+  }
+}
+
+/*
+ * Technology rail (components/skills/TechRail.tsx). The track holds two identical groups and
+ * slides left by half its own width, i.e. exactly one group (each group ends in the same gap
+ * that separates its tiles), so the loop has no seam. transform only, one compositor layer,
+ * no JavaScript. The edges fade out with a mask. Hovering the rail pauses it (fine pointers).
+ * Reduced motion: no movement and no mask; the rail becomes a static wrapped grid and the
+ * duplicate group is removed.
+ */
+.tech-rail {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.tech-rail-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: tech-rail 70s linear infinite;
+}
+
+.tech-rail-group {
+  display: flex;
+  flex: none;
+  gap: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+/* Pause control (RailToggle) flips data-paused on the panel; the hover pause below stays. */
+[data-rail][data-paused="true"] .tech-rail-track {
+  animation-play-state: paused;
+}
+
+/* Nothing to pause without JavaScript. Reduced motion hides it below. */
+@media (scripting: none) {
+  .rail-toggle {
+    display: none;
+  }
+}
+
+@keyframes tech-rail {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tech-rail:hover .tech-rail-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-rail {
+    mask-image: none;
+    padding-inline: 1rem;
+  }
+
+  .tech-rail-track {
+    width: auto;
+    animation: none;
+    will-change: auto;
+  }
+
+  .tech-rail-group {
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+    padding-right: 0;
+  }
+
+  .rail-toggle {
+    display: none;
+  }
+
+  .tech-rail-copy {
+    display: none;
+  }
+}
+
+/*
+ * Spotlight card (components/ui/spotlight-card.tsx). Two overlay layers per card, each a
+ * clipped box holding one soft blob that only ever moves by `transform` (the pointer position
+ * arrives as --sx / --sy) and fades by `opacity`. The wash is the active accent at the panel
+ * tint strength (so white stays quieter than red or blue). The rim is the same blob masked down
+ * to the 2px border ring, accent with a small core of the highlight. Hover-capable, fine
+ * pointers only; touch and keyboard never see it. Cards using it have a 2px border.
+ */
+.spotlight {
+  --spot-border: 2px;
+}
+
+.spotlight-layer {
+  position: absolute;
+  z-index: 10;
+  inset: calc(var(--spot-border) * -1);
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease-out;
+}
+
+.spotlight-layer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--spot-size);
+  height: var(--spot-size);
+  transform: translate3d(calc(var(--sx, 0px) - 50%), calc(var(--sy, 0px) - 50%), 0);
+}
+
+.spotlight-wash {
+  --spot-size: 30rem;
+}
+
+.spotlight-wash::before {
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) calc(var(--tint) * 0.75), transparent),
+    transparent
+  );
+}
+
+.spotlight-rim {
+  --spot-size: 20rem;
+  padding: var(--spot-border);
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+}
+
+.spotlight-rim::before {
+  background-image:
+    radial-gradient(
+      closest-side,
+      color-mix(in srgb, var(--highlight) 90%, transparent),
+      transparent 30%
+    ),
+    radial-gradient(closest-side, var(--accent), transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight:hover > .spotlight-layer {
+    opacity: 1;
+  }
+
+  .spotlight:hover > .spotlight-layer::before {
+    will-change: transform;
+  }
+}
+
+/*
+ * Hero entrance (~1.4s, one time). Pure CSS on purpose: it runs on the first painted frame
+ * instead of waiting for hydration, so the hero is never hidden and LCP is not delayed. The
+ * name only moves (never fades), so the largest text is visible from the first paint; the
+ * smaller pieces fade in behind it. `backwards` holds each piece at its start while it waits.
+ */
+@keyframes hero-rise {
+  from {
+    transform: translateY(3.5rem);
+  }
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
+
+@keyframes hero-draw {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero] {
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-fill-mode: backwards;
+  }
+  [data-hero="tag"] {
+    animation-name: hero-fade-up;
+    animation-duration: 0.5s;
+  }
+  [data-hero="name"] {
+    animation-name: hero-rise;
+    animation-duration: 0.8s;
+  }
+  [data-hero="name"] + [data-hero="name"] {
+    animation-delay: 0.1s;
+  }
+  [data-hero="rule"] {
+    animation-name: hero-draw;
+    animation-delay: 0.55s;
+    transform-origin: left center;
+  }
+  [data-hero="copy"] {
+    animation-name: hero-fade-up;
+    animation-delay: 0.75s;
+  }
+  [data-hero="quote"] {
+    animation-name: hero-fade-up;
+    animation-delay: 0.85s;
+  }
+}
+
+/*
+ * Hero atmosphere (components/ui/particle-hero.tsx). Cold silver light falling from the upper
+ * right, hairlines on the layout edges, drifting dust. Colours come from the tokens only, so
+ * the hero stays neutral (no blue or gold). Sway animates transform and opacity only; it is
+ * off for reduced motion and paused while the hero is off screen (`data-atmosphere="paused"`).
+ */
+.hero-bloom {
+  background-image: radial-gradient(
+    ellipse 60% 50% at 66% 0%,
+    color-mix(in srgb, var(--color-silver) 10%, transparent),
+    transparent 70%
+  );
+}
+
+/*
+ * The beams hang from one fixed point in the ceiling. This zero-width pivot sits there (left
+ * 66%, just above the hero) and reaches the bottom edge; GSAP swings it toward the pointer
+ * (particle-hero.tsx, BEAM_APEX must match `left`). Its origin is the pivot point itself, so it
+ * never depends on the hero's size. The beams keep their own sway inside it.
+ */
+.hero-aim {
+  position: absolute;
+  top: -4.5rem;
+  bottom: 0;
+  left: 66%;
+  width: 0;
+  transform-origin: 0 0;
+}
+
+.hero-beam {
+  position: absolute;
+  top: 1.5rem;
+  left: 0;
+  width: min(44rem, 120vw);
+  height: calc((100% - 4.5rem) * 0.92);
+  margin-left: calc(min(44rem, 120vw) / -2);
+  transform-origin: 50% 0;
+  transform: rotate(var(--r));
+  opacity: 0.85;
+  background-image: conic-gradient(
+    from 0deg at 50% -5%,
+    transparent 44%,
+    color-mix(in srgb, var(--color-silver) 12%, transparent) 48.5%,
+    color-mix(in srgb, var(--color-silver) 24%, transparent) 50%,
+    color-mix(in srgb, var(--color-silver) 12%, transparent) 51.5%,
+    transparent 56%
+  );
+  mask-image: linear-gradient(to bottom, black 30%, transparent 92%);
+}
+
+.hero-beam[data-beam="a"] {
+  --r: 22deg;
+}
+
+.hero-beam[data-beam="b"] {
+  --r: -18deg;
+}
+
+.hero-beam[data-beam="c"] {
+  --r: 3deg;
+}
+
+.hero-line-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform-origin: top;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--color-silver) 16%, transparent) 25%,
+    color-mix(in srgb, var(--color-silver) 16%, transparent) 75%,
+    transparent
+  );
+}
+
+.hero-line-v[data-side="left"] {
+  left: max(0.5rem, calc(50% - 36rem));
+}
+
+.hero-line-v[data-side="right"] {
+  right: max(0.5rem, calc(50% - 36rem));
+}
+
+.hero-line-h {
+  position: absolute;
+  inset-inline: 0;
+  top: 6.5rem;
+  height: 1px;
+  transform-origin: left;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-silver) 14%, transparent),
+    transparent
+  );
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-line-draw-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes hero-line-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes hero-beam-sway {
+  0%,
+  100% {
+    transform: rotate(var(--r)) scale(1);
+    opacity: 0.85;
+  }
+  33% {
+    transform: rotate(calc(var(--r) - 2deg)) scale(1.12);
+    opacity: 1;
+  }
+  66% {
+    transform: rotate(calc(var(--r) + 2deg)) scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-fade {
+    animation: hero-fade 2.2s ease-out 0.2s backwards;
+  }
+  .hero-beam {
+    will-change: transform, opacity;
+    animation: hero-beam-sway 17s ease-in-out infinite;
+  }
+  .hero-beam[data-beam="b"] {
+    animation-duration: 14s;
+  }
+  .hero-beam[data-beam="c"] {
+    animation-duration: 21s;
+    animation-direction: reverse;
+  }
+  .hero-line-v {
+    animation: hero-line-draw-y 1.6s cubic-bezier(0.215, 0.61, 0.355, 1) 1.2s backwards;
+  }
+  .hero-line-h {
+    animation: hero-line-draw-x 1.6s cubic-bezier(0.215, 0.61, 0.355, 1) 1.5s backwards;
+  }
+  [data-atmosphere="paused"] .hero-beam {
+    animation-play-state: paused;
+  }
+}
+
+/*
+ * Web transition (animations/web). Idle, the overlay is hidden and costs nothing. The web is thin
+ * silver strands (drawn with a normalised dash: pathLength 1) that land in ringed nodes; the slab
+ * is page-coloured, leans on its leading edge (the lean is a skew set by GSAP) and carries a bone
+ * rule and a halftone fringe there. Existing tokens only. Only transform, opacity and SVG
+ * geometry are animated. While it runs, the incoming page's CSS entrance is held (`data-hero`),
+ * so it plays as the slab clears rather than underneath it.
+ */
+.web-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  overflow: hidden;
+}
+
+.web-web {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.web-strand {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-silver) 85%, transparent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.web-node {
+  fill: var(--color-ink);
+  stroke: var(--color-bone);
+  stroke-width: 1.5;
+}
+
+.web-slab {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--color-ink);
+  will-change: transform;
+}
+
+.web-slab[data-dir="previous"] {
+  left: auto;
+  right: 0;
+}
+
+.web-slab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(16rem, 40vw);
+  border-left: 2px solid var(--color-bone);
+  background-image:
+    radial-gradient(
+      circle at 25% 25%,
+      color-mix(in srgb, var(--color-silver) 40%, transparent) 1.3px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      color-mix(in srgb, var(--color-silver) 40%, transparent) 1.3px,
+      transparent 1.8px
+    );
+  background-size: 16px 16px;
+  mask-image: linear-gradient(to right, #000, transparent);
+}
+
+.web-slab[data-dir="previous"]::before {
+  left: auto;
+  right: 0;
+  border-left: 0;
+  border-right: 2px solid var(--color-bone);
+  mask-image: linear-gradient(to left, #000, transparent);
+}
+
+html[data-web-transition] [data-hero] {
+  animation-play-state: paused;
+}
+
+/* After a transition focus moves to <main> so assistive tech lands on the new page; no ring. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/*
+ * Section choreography start states (SectionMotion). The section's top rule is drawn from the
+ * left, and its tab, end marks and backdrop fade in as it arrives. Scoped like the reveal states
+ * below: only with scripting on and motion allowed, so everyone else sees the finished section.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-sm="rule"] {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  [data-sm="tab"],
+  [data-sm="end"],
+  [data-sm="field"] {
+    opacity: 0;
+  }
+}
+
+/*
+ * Start states for scroll reveals (Reveal). Applied only when scripting is on and motion is
+ * allowed, so no-JS and reduced-motion visitors see everything, and the SSR page never
+ * flashes before GSAP takes over. `data-reveal` hides the block itself; `data-reveal-group`
+ * hides its direct children (staggered batches). GSAP sets the inline end state. Below the
+ * fold only: nothing above the fold waits on JS.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal],
+  [data-reveal-group] > * {
+    opacity: 0;
+  }
+}
+
+/*
+ * Architecture diagram (ArchitectureDiagram) start states: node boxes fade/lift in, then edge
+ * labels fade in last. Connecting paths are not listed here — their stroke-dasharray/dashoffset
+ * only exist once JS measures the rendered layout, so with no JS they render as normal solid
+ * lines, already in their final state. Scoped like Reveal: scripting on, motion allowed only.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-arch-node] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  [data-arch-label] {
+    opacity: 0;
+  }
+}
+
+/*
+ * Case-study screenshot (Screen): the ink slab is hidden by default and only covers the frame
+ * when GSAP will wipe it away (scripting on, motion allowed).
+ */
+[data-screen-slab] {
+  transform: scaleX(0);
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-screen-slab] {
+    transform: scaleX(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,6 +3,17 @@ export const SITE = {
   role: "Web Developer / Creative Technologist",
 } as const;
 
+export const SITE_DESCRIPTION =
+  "Portfolio of Aditya Sharma, web developer and creative technologist.";
+
+/** Social preview image (public/og.png, 1200x630). Repeated wherever a page sets its own `openGraph`. */
+export const OG_IMAGE = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: `${SITE.name} — ${SITE.role}`,
+} as const;
+
 export const HERO_COPY = {
   firstName: "Aditya",
   lastName: "Sharma",
