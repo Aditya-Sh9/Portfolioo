@@ -23,7 +23,10 @@ export default function CaseSection({
   layout = "split",
   children,
 }: CaseSectionProps) {
-  const headingId = `case-${index}`;
+  // The anchor sits on the section, not the heading: the heading is still offset by its Reveal
+  // when Lenis measures an "On this page" jump, which would land it under the navbar.
+  const anchorId = `case-${index}`;
+  const headingId = `${anchorId}-title`;
   const wide = layout === "wide";
 
   const heading = (
@@ -40,8 +43,9 @@ export default function CaseSection({
 
   return (
     <section
+      id={anchorId}
       aria-labelledby={headingId}
-      className="relative border-t-2 border-steel pt-16 pb-14 first:border-t-0 md:pt-20 md:pb-20"
+      className="relative scroll-mt-4 border-t-2 border-steel pt-16 pb-14 first:border-t-0 md:pt-20 md:pb-20"
     >
       <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-px">
         <div className="mx-auto flex w-full max-w-6xl -translate-y-1/2 items-center justify-between px-4">

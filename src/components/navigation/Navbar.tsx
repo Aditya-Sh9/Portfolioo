@@ -108,7 +108,9 @@ export default function Navbar() {
         Skip to content
       </a>
 
-      <header className="fixed inset-x-4 top-4 z-50 mx-auto max-w-6xl">
+      {/* The header box also spans the closed mobile menu below the bar, so it lets taps through;
+          only the bar, the open menu and the open scrim take them back. */}
+      <header className="pointer-events-none fixed inset-x-4 top-4 z-50 mx-auto max-w-6xl">
         {/* Outside-tap target for the mobile menu; sits behind the header's own content. */}
         <div
           aria-hidden
@@ -119,7 +121,7 @@ export default function Navbar() {
 
         <nav
           aria-label="Primary"
-          className="flex items-center justify-between border-2 border-steel bg-charcoal/80 px-4 py-2 backdrop-blur-md"
+          className="pointer-events-auto flex items-center justify-between border-2 border-steel bg-charcoal/80 px-4 py-2 backdrop-blur-md"
         >
           <NavAnchor
             onHome={onHome}
