@@ -68,10 +68,11 @@ export const NAV_LINKS = [
   { id: SECTION_IDS.build, index: "06", label: "How I Build" },
   { id: SECTION_IDS.beyond, index: "07", label: "Beyond" },
   { id: SECTION_IDS.why, index: "08", label: "Why I Build" },
+  { id: SECTION_IDS.contact, index: "09", label: "Contact" },
 ] as const;
 
+/** The navbar's call to action: Aditya's CV (Google Drive viewer, opens in a new tab). */
 export const NAV_CTA = {
-  id: SECTION_IDS.contact,
-  index: "09",
-  label: "Contact",
+  href: "https://drive.google.com/file/d/18sUWwczYfPBfYZR81idtnEqgJyJS2fq-/view?usp=sharing",
+  label: "CV",
 } as const;

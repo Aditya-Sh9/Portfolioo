@@ -1,7 +1,7 @@
 "use client";
 
 import { useLenis } from "lenis/react";
-import { Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ComponentPropsWithoutRef } from "react";
@@ -46,7 +46,7 @@ function NavAnchor({
   return onHome ? <a href={href} {...props} /> : <Link href={href} {...props} />;
 }
 
-const SECTION_LIST = [SECTION_IDS.hero, ...NAV_LINKS.map((l) => l.id), NAV_CTA.id];
+const SECTION_LIST = [SECTION_IDS.hero, ...NAV_LINKS.map((l) => l.id)];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -148,13 +148,16 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <NavAnchor
-              onHome={onHome}
-              href={hrefFor(NAV_CTA.id)}
-              className="hidden border-2 border-bone px-4 py-1.5 text-xs font-bold tracking-widest text-bone uppercase shadow-brutal-sm transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px hover:bg-bone hover:text-ink active:translate-x-[3px] active:translate-y-[3px] active:shadow-none lg:inline-flex pointer-coarse:min-h-11 pointer-coarse:items-center"
+            <a
+              href={NAV_CTA.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${NAV_CTA.label} (opens in a new tab)`}
+              className="hidden items-center gap-1.5 border-2 border-bone px-4 py-1.5 text-xs font-bold tracking-widest text-bone uppercase shadow-brutal-sm transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px hover:bg-bone hover:text-ink active:translate-x-[3px] active:translate-y-[3px] active:shadow-none lg:inline-flex pointer-coarse:min-h-11"
             >
               {NAV_CTA.label}
-            </NavAnchor>
+              <ArrowUpRight aria-hidden size={14} />
+            </a>
             <button
               ref={menuButton}
               type="button"
@@ -176,7 +179,7 @@ export default function Navbar() {
           className="pointer-events-none mt-2 origin-top -translate-y-2 border-2 border-steel bg-charcoal/95 opacity-0 backdrop-blur-md transition-[opacity,transform] duration-200 data-[open=true]:pointer-events-auto data-[open=true]:translate-y-0 data-[open=true]:opacity-100 lg:hidden"
         >
           <ul className="divide-y-2 divide-steel">
-            {[...NAV_LINKS, NAV_CTA].map((link) => (
+            {NAV_LINKS.map((link) => (
               <li key={link.id}>
                 <NavAnchor
                   onHome={onHome}
@@ -194,6 +197,19 @@ export default function Navbar() {
                 </NavAnchor>
               </li>
             ))}
+            <li>
+              <a
+                href={NAV_CTA.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                aria-label={`${NAV_CTA.label} (opens in a new tab)`}
+                className="flex min-h-11 items-center gap-4 px-4 py-3 text-sm font-bold tracking-widest text-bone uppercase"
+              >
+                <ArrowUpRight aria-hidden size={14} className="w-5 shrink-0" />
+                {NAV_CTA.label}
+              </a>
+            </li>
           </ul>
         </div>
       </header>
