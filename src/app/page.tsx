@@ -14,8 +14,8 @@ export default function Home() {
     <main id="main" className="flex flex-1 flex-col">
       <Hero />
       <About />
-      <CurrentlyBuilding />
       <SelectedWork />
+      <CurrentlyBuilding />
       <Experience />
       <HowIBuild />
       {/* Placeholder: replaced once Aditya supplies the images. */}

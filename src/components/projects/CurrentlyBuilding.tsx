@@ -19,7 +19,7 @@ export default function CurrentlyBuilding() {
   return (
     <Section
       id={SECTION_IDS.building}
-      index="03"
+      index="04"
       title="Currently Building"
       field="speed"
     >

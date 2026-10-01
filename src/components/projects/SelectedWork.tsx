@@ -10,7 +10,7 @@ import { SECTION_IDS } from "@/lib/constants";
 /** What each project is and why it matters; technical depth lives in the case studies. */
 export default function SelectedWork() {
   return (
-    <Section id={SECTION_IDS.work} index="04" title="Selected Work">
+    <Section id={SECTION_IDS.work} index="03" title="Selected Work">
       <ol className="mt-10 grid gap-10">
         {PROJECTS.map((project, i) => {
           // Alternate the title panel's side. DOM order stays title-first for readers.

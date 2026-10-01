@@ -1,10 +1,10 @@
 export const SITE = {
   name: "Aditya Sharma",
-  role: "Web Developer / Creative Technologist",
+  role: "Full-Stack Developer / Software Engineer",
 } as const;
 
 export const SITE_DESCRIPTION =
-  "Portfolio of Aditya Sharma, web developer and creative technologist.";
+  "Portfolio of Aditya Sharma, full-stack developer and software engineer.";
 
 /** Social preview image (public/og.png, 1200x630). Repeated wherever a page sets its own `openGraph`. */
 export const OG_IMAGE = {
@@ -62,8 +62,8 @@ export const SECTION_IDS = {
 /** Navigation entries in page order. `index` matches the 01–09 section numbering. */
 export const NAV_LINKS = [
   { id: SECTION_IDS.about, index: "02", label: "About" },
-  { id: SECTION_IDS.building, index: "03", label: "Building" },
-  { id: SECTION_IDS.work, index: "04", label: "Work" },
+  { id: SECTION_IDS.work, index: "03", label: "Work" },
+  { id: SECTION_IDS.building, index: "04", label: "Building" },
   { id: SECTION_IDS.experience, index: "05", label: "Experience" },
   { id: SECTION_IDS.build, index: "06", label: "How I Build" },
   { id: SECTION_IDS.beyond, index: "07", label: "Beyond" },
