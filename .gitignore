@@ -47,3 +47,6 @@ docs/
 
 # 7 MB original photo, kept locally; the site uses public/images/about-portrait.webp
 /public/images/Aditya about.jpg
+
+# 30 MB 4K source recordings, kept locally; the site uses web-encoded MP4s in public/projects/
+/public/video/
