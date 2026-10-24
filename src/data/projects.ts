@@ -41,6 +41,9 @@ export const SOLACE: ActiveProject = {
   stack: [
     "Next.js",
     "TypeScript",
+    "GSAP",
+    "Lenis",
+    "Tiptap",
     "Express",
     "FastAPI",
     "scikit-learn",
