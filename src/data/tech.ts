@@ -21,6 +21,7 @@ const TECH: Record<string, Tech> = {
   "HTML & CSS": { icons: ["html5", "css3"] },
   Bootstrap: { icons: ["bootstrap"] },
   Vite: { icons: ["vite"] },
+  GSAP: { icons: ["gsap"] },
 
   // Backend
   "Node.js": { icons: ["nodejs"] },
