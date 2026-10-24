@@ -22,7 +22,7 @@ export const sections = [
 
 SOLACE is an emotionally intelligent AI wellness companion. It’s not a medical app and it’s not a chatbot — it’s built to feel like a personal health detective with a warm, human soul: something that helps you notice the quiet, hard-to-name things (low energy, brain fog, mood swings, “just off”) and surfaces honest, non-clinical patterns in your own data, without ever diagnosing or prescribing.
 
-It’s a solo portfolio project, built in public phases, and it’s in active development: Phases 0–4 are complete and Phase 5 is in progress.
+It’s a solo portfolio project, built in public phases, and it’s in active development: Phases 0–6 are complete, and Phase 7 (polish and hardening) is next.
 
 ### Why I built it
 
@@ -107,7 +107,7 @@ scikit-learn, trained per-user and stateless. It learns your data after 14+ chec
 
 No diagnoses. No medical claims. No supplement or affiliate pushing. No dark patterns.
 
-The journal will never feed any AI/ML layer — that boundary is architectural, not a setting.
+The journal never feeds any AI/ML layer, and neither does cycle data — that boundary is architectural, not a setting.
 
 </CaseSection>
 
@@ -119,10 +119,10 @@ Three independently deployed services:
   core="api"
   nodes={[
     { id: "client", label: "Next.js", detail: "Vercel", layer: "client" },
-    { id: "api", label: "Express + TypeScript API", detail: "Railway", layer: "core" },
+    { id: "api", label: "Express + TypeScript API", detail: "Render", layer: "core" },
     { id: "db", label: "Supabase Postgres", detail: "Postgres + Auth, via Prisma", layer: "data" },
     { id: "gemini", label: "Google Gemini Flash", layer: "external" },
-    { id: "ml", label: "FastAPI ML service", detail: "Railway, stateless", layer: "service" },
+    { id: "ml", label: "FastAPI ML service", detail: "Render, stateless", layer: "service" },
   ]}
   edges={[
     { from: "client", to: "api", kind: "sync" },
@@ -134,20 +134,21 @@ Three independently deployed services:
 
 - The frontend never talks to the database, Gemini, or the ML service directly — everything routes through the backend.
 - `GET /api/patterns` is decoupled from the main dashboard load and has a 4-second timeout: if the ML service is slow, asleep, or fails, the prediction card is silently hidden rather than blocking the dashboard.
-- The journal (Phase 5) is encrypted in the browser using Web Crypto: the key never leaves the client, and the backend stores only ciphertext.
+- Journal encryption happens entirely in the browser (Web Crypto: PBKDF2 → AES-GCM 256). The key comes from your password (or a journal passphrase for Google-only accounts) and never leaves the browser; the server stores only ciphertext, so it can’t read a page even with full database access.
+- Gemini models are configuration, not code: the backend tries a chain of Flash models and falls back to pre-written copy if none answer, logging why.
 
-<Note>The backend and ML service run on Railway’s free tier, which sleeps after inactivity — the first request after a while may take a few seconds to wake up.</Note>
+<Note>The backend and ML service run on Render’s free tier, which sleeps after 15 minutes of inactivity — the first request after a while can take 30–50 seconds to wake up.</Note>
 
 ### Stack
 
 <Spec
   items={[
-    { label: "Frontend", value: "Next.js 16 (App Router), TypeScript, Tailwind CSS 4, Framer Motion, custom hand-drawn UI kit" },
+    { label: "Frontend", value: "Next.js 16 (App Router), TypeScript, Tailwind CSS 4, Framer Motion, GSAP, Lenis, Tiptap, custom hand-drawn UI kit" },
     { label: "Backend", value: "Express 5, TypeScript, Prisma, Zod" },
     { label: "ML service", value: "Python 3.12, FastAPI, scikit-learn, pandas, numpy, scipy" },
     { label: "Auth & DB", value: "Supabase (Postgres + Auth)" },
     { label: "AI", value: "Google Gemini Flash" },
-    { label: "Deploy", value: "Vercel (frontend), Railway (backend + ML), Supabase Cloud" },
+    { label: "Deploy", value: "Vercel (frontend), Render (backend + ML), Supabase Cloud" },
   ]}
 />
 
@@ -165,7 +166,7 @@ Three independently deployed services:
   <Decision
     n="02"
     title="A stateless model, retrained per request"
-    why="The backend sends the user’s complete check-in history to the ML service, which trains the Gradient Boosting models in memory for that request and immediately returns the prediction. This avoids storing model files on Railway’s ephemeral filesystem and keeps the service horizontally scalable."
+    why="The backend sends the user’s complete check-in history to the ML service, which trains the Gradient Boosting models in memory for that request and immediately returns the prediction. This avoids storing model files on Render’s ephemeral filesystem and keeps the service horizontally scalable."
     tradeoff="The model has to retrain for every prediction request, so there is some additional CPU/time cost compared with loading a persisted model. With the current small per-user datasets, the training is lightweight enough that the simplicity and reliability are worth it."
   />
   <Decision
@@ -219,7 +220,7 @@ Three independently deployed services:
 <FactList
   variant="project"
   facts={[
-    { value: "149", label: "Automated tests" },
+    { value: "182", label: "Automated tests" },
     { value: "9", label: "Rule-engine rules" },
     { value: "19", label: "Banned phrases" },
   ]}
@@ -227,8 +228,9 @@ Three independently deployed services:
 
 ### Testing
 
-- **89 backend tests (Vitest)** cover the rule engine, the Gemini tone validator and the ML client.
+- **122 backend tests (Vitest)** cover areas including the rule engine, the Gemini tone validator and the ML client.
 - **60 ML-service tests (pytest)** cover feature preparation and the model’s training, sanity, stability and confidence gates.
+- Browser end-to-end checks on top of both suites.
 
 ### Rule engine
 
@@ -247,7 +249,7 @@ Nine rules: five deficiency-related rules (iron, vitamin D, magnesium, B12, vita
 
 <PhaseList phases={SOLACE.phases} />
 
-Phase 5 is the private encrypted journal: its encrypted backend is done, and the journal interface is next. The deferred emotion-classification work is planned for Phase 7.
+Phases 0–6 are complete, including the private encrypted journal and the cycle-aware wellness section. Phase 7 (polish, accessibility, docs and deploy hardening) is next, along with the deferred emotion-classification layer.
 
 </CaseSection>
 

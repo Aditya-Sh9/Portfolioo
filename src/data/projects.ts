@@ -50,7 +50,7 @@ export const SOLACE: ActiveProject = {
     "Gemini API",
   ],
   facts: [
-    { value: "149", label: "Automated tests" },
+    { value: "182", label: "Automated tests" },
     { value: "3", label: "Deployed services" },
   ],
   accent: "red",
@@ -62,16 +62,16 @@ export const SOLACE: ActiveProject = {
   role: "Design and development, end to end",
   team: "Solo",
   hasCaseStudy: true,
-  // Source: the SOLACE repo state.md (2026-09-24): Phase 5 sub-phase 5a (encrypted journal
-  // backend) is done, the journal UI is not. It stays a labelled roadmap, never a card headline.
+  // Source: the SOLACE README (2026-10-24): Phases 0–6 are done, Phase 7 is next but not
+  // started (so no phase is `current`). It stays a labelled roadmap, never a card headline.
   phases: [
     { number: 0, name: "Monorepo, deploy pipeline, Supabase", done: true },
     { number: 1, name: "Auth + animated onboarding", done: true },
     { number: 2, name: "Daily check-in + dashboard", done: true },
     { number: 3, name: "Rule engine + Gemini insights", done: true },
     { number: 4, name: "Personal ML pattern model", done: true },
-    { number: 5, name: "Encrypted journal", done: false, current: true },
-    { number: 6, name: "Women’s wellness section", done: false },
+    { number: 5, name: "Encrypted journal", done: true },
+    { number: 6, name: "Cycle-aware wellness section", done: true },
     { number: 7, name: "Polish, accessibility, docs, deploy hardening", done: false },
   ],
 };
